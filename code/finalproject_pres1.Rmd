@@ -1,0 +1,159 @@
+# Final project presentation 1
+
+```{r}
+# Load the necessary libraries
+library(tidyverse)
+library(reshape2)
+library(wesanderson)
+library(harrypotter)
+library(ggpubr)
+library(tagger)
+
+library(tidyr)
+library(dplyr)
+
+```
+
+
+```{r}
+# Load the gene expression data and metadata (code suggestions to remove unknown values from stackoverflow.com)
+GeneExpression_data<- read.csv(file = "/Users/Student1/Downloads/QBS103_finalProject_geneExpression.csv")
+Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv")
+
+# Loak at both the csv files using head and tail function
+
+head(GeneExpression_data)
+tail(GeneExpression_data)
+head(Metadata)
+tail(Metadata)
+
+```
+
+```{r}
+# Rename the first column of GeneExpression_data
+colnames(GeneExpression_data) [1]<- "Genes"
+
+# Check the renaming
+
+head(GeneExpression_data)
+
+```
+
+```{r}
+# Convert the gene expression data into long format
+longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
+                          value.name = "gene_expression", variable.name = "participant_id")
+
+# Check the long format conversion
+
+head(longData)
+
+```
+
+```{r}
+# Link longData with Metadata
+
+LinkedData<- merge(longData, Metadata, by = "participant_id")
+
+# View the linked data - LongData
+
+head(LinkedData)
+tail(LinkedData)
+
+```
+
+```{r}
+# Identify one gene, one continuous covariate, and two categorical covariates in the provided dataset
+
+# One gene - CD24
+# One continuous covariate - age
+# Two categorical covariates - sex, mechanical_ventilation
+
+```
+
+## Generate the following plots using ggplot2 for your covariates of choice:
+```{r}
+# Histogram for gene expression
+# Select a gene for the plot
+
+GeneChoice<- LinkedData[LinkedData$Genes == "CD24", ]
+
+Histogram<- ggplot(GeneChoice, aes(x = gene_expression)) +
+  geom_histogram()+
+  labs(title = "The Expression Level of CD24 Gene", x = "Expression", y  = "Frequency")
+
+plot(Histogram)
+```
+
+```{r}
+# Scatterplot for gene expression and continuous covariate
+
+Scatterplot <- ggplot(GeneChoice, aes(x = age, y = gene_expression))+
+  geom_point()+
+  labs(title = "The association of CD24 expression with age", x = "Age", y = "CD24 expression")
+plot(Scatterplot)
+
+```
+
+```{r}
+# Boxplot of gene expression separated by both continuous covariates
+# Code suggestions for age group is from community.rstudio
+# First change age >89 values to age =  90
+GeneChoice$age[GeneChoice$age==" >89"]<- "90"
+# Check the change of the value
+GeneChoice$age
+# Convert age values from character to numeric values
+GeneChoice$age<- as.numeric(GeneChoice$age)
+
+# Create age_group category in genechoice dataframe
+GeneChoice<- GeneChoice %>% 
+  mutate(
+    # Create a category named age_group
+    age_group = dplyr::case_when(
+      age<=29          ~"0-29",
+      age>29 & age<=49  ~"30-49",
+      age> 49 & age<=69  ~ "50-69",
+      age> 69 & age<=89 ~"70-89",
+      age>89          ~"> 89"),
+   # Converting age_group to factor
+    age_group = factor(
+      age_group,
+      level = c("0-29", "30-49","50-69","70-89", "> 89")
+     ))
+    
+# Check the inclusion of age_group
+GeneChoice$age_group
+
+range(GeneChoice$gene_expression)
+    
+# Now create a category named GeneExpressionGroup from the gene_expression values
+
+GeneChoice<- GeneChoice %>% 
+  mutate( # Create a category named  GeneExpressionGroup
+    GeneExpressionGroup = dplyr::case_when(
+         gene_expression<= 100   ~"0-100",
+         gene_expression> 100 & gene_expression<=200   ~"100-200",
+         gene_expression> 200 & gene_expression<=300   ~"200-300",
+         gene_expression> 300 & gene_expression<=200   ~"300-400",
+         gene_expression> 400 & gene_expression<=200   ~"400-500",
+         gene_expression> 100    ~">500"),
+    
+    
+   # Converting the group to factor
+     GeneExpressionGroup= factor(
+      GeneExpressionGroup,
+      level = c("0-100", "100-200","200-300","300-400","400-500", "> 500")
+     ))
+
+  
+Boxplot <- ggplot(GeneChoice, aes(x = age, y = gene_expression, fill = age_group ))+
+  geom_boxplot()+
+  facet_wrap(~age_group+GeneExpressionGroup)
+
+plot(Boxplot)
+
+
+```
+
+ 
+
