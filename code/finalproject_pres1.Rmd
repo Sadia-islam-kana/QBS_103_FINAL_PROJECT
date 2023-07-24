@@ -16,16 +16,14 @@ library(dplyr)
 
 
 ```{r}
-# Load the gene expression data and metadata (code suggestions to remove unknown values from stackoverflow.com)
+# Load the gene expression data and metadata
 GeneExpression_data<- read.csv(file = "/Users/Student1/Downloads/QBS103_finalProject_geneExpression.csv")
 Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv")
 
-# Loak at both the csv files using head and tail function
+# Loak at both the csv files using head function
 
 head(GeneExpression_data)
-tail(GeneExpression_data)
 head(Metadata)
-tail(Metadata)
 
 ```
 
@@ -55,41 +53,58 @@ head(longData)
 
 LinkedData<- merge(longData, Metadata, by = "participant_id")
 
-# View the linked data - LongData
+# View the linked data
 
 head(LinkedData)
 tail(LinkedData)
 
 ```
 
-```{r}
+
 # Identify one gene, one continuous covariate, and two categorical covariates in the provided dataset
 
 # One gene - CD24
 # One continuous covariate - age
 # Two categorical covariates - sex, mechanical_ventilation
 
-```
-
 ## Generate the following plots using ggplot2 for your covariates of choice:
 ```{r}
+
 # Histogram for gene expression
-# Select a gene for the plot
+# Selected CD24 gene
+# Subset LinkedData for CD24 gene expression
 
-GeneChoice<- LinkedData[LinkedData$Genes == "CD24", ]
+CD24_expression<- LinkedData[LinkedData$Genes == "CD24", ]
 
-Histogram<- ggplot(GeneChoice, aes(x = gene_expression)) +
+# Define a theme for my plots
+
+MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+      
+# Define a color palette for histogram
+ColorPalette_his <- harrypotter::harrypotter(house = "Ravenclaw", n=6 )
+
+
+# Now Generate histogram
+Histogram<- ggplot(CD24_expression, aes(x = gene_expression)) +
   geom_histogram()+
-  labs(title = "The Expression Level of CD24 Gene", x = "Expression", y  = "Frequency")
+  labs(title = "The Expression Level of CD24 Gene", x = "Expression", y  = "Frequency")+
+  MyTheme +
+  scale_color_manual(values = ColorPalette_his)
 
 plot(Histogram)
 ```
 
 ```{r}
 # Scatterplot for gene expression and continuous covariate
+# Selected age as continuous covariate
+# Create a colorpalette
 
-Scatterplot <- ggplot(GeneChoice, aes(x = age, y = gene_expression))+
+color_palette_scatter<- harrypotter::harrypotter(n=6, house = "Ravenclaw")
+
+Scatterplot <- ggplot(CD24_expression, aes(x = age, y = gene_expression, color = age_group))+
   geom_point()+
+  MyTheme+
+  scale_color_manual(color_palette_scatter)+
   labs(title = "The association of CD24 expression with age", x = "Age", y = "CD24 expression")
 plot(Scatterplot)
 
@@ -99,14 +114,14 @@ plot(Scatterplot)
 # Boxplot of gene expression separated by both continuous covariates
 # Code suggestions for age group is from community.rstudio
 # First change age >89 values to age =  90
-GeneChoice$age[GeneChoice$age==" >89"]<- "90"
+CD24_expression$age[CD24_expression$age==" >89"]<- "90"
 # Check the change of the value
-GeneChoice$age
+CD24_expression$age
 # Convert age values from character to numeric values
-GeneChoice$age<- as.numeric(GeneChoice$age)
+CD24_expression$age<- as.numeric(CD24_expression$age)
 
-# Create age_group category in genechoice dataframe
-GeneChoice<- GeneChoice %>% 
+# Create age_group category in CD24_expression dataframe
+CD24_expression<- CD24_expression %>% 
   mutate(
     # Create a category named age_group
     age_group = dplyr::case_when(
@@ -122,13 +137,13 @@ GeneChoice<- GeneChoice %>%
      ))
     
 # Check the inclusion of age_group
-GeneChoice$age_group
+CD24_expression$age_group
 
-range(GeneChoice$gene_expression)
+range(CD24_expression$gene_expression)
     
 # Now create a category named GeneExpressionGroup from the gene_expression values
 
-GeneChoice<- GeneChoice %>% 
+CD24_expression<- CD24_expression %>% 
   mutate( # Create a category named  GeneExpressionGroup
     GeneExpressionGroup = dplyr::case_when(
          gene_expression<= 100   ~"0-100",
@@ -146,7 +161,7 @@ GeneChoice<- GeneChoice %>%
      ))
 
   
-Boxplot <- ggplot(GeneChoice, aes(x = age, y = gene_expression, fill = age_group ))+
+Boxplot <- ggplot(CD24_expression, aes(x = age, y = gene_expression, fill = age_group ))+
   geom_boxplot()+
   facet_wrap(~age_group+GeneExpressionGroup)
 
