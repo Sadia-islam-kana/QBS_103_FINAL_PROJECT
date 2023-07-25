@@ -1,4 +1,10 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Final project presentation 1
+
 
 ```{r}
 # Load the necessary libraries
@@ -71,8 +77,9 @@ tail(LinkedData)
 ```{r}
 
 # Histogram for gene expression
-# Selected CD24 gene
-# Subset LinkedData for CD24 gene expression
+
+# I selected the CD24 gene for my plots
+# Now, subset LinkedData for CD24 gene expression
 
 CD24_expression<- LinkedData[LinkedData$Genes == "CD24", ]
 
@@ -80,39 +87,36 @@ CD24_expression<- LinkedData[LinkedData$Genes == "CD24", ]
 
 MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
 
+# Calculating mean, standard deviation to display on histogram
 
-# Now Generate histogram
+MeanCD24 <- round(mean(CD24_expression$gene_expression), digits = 1)
+SDCD24<- round(sd(CD24_expression$gene_expression), digits = 1)
+
+
+# Now Generate histogram for CD24 expression
 Histogram<- ggplot(CD24_expression) +
-  geom_histogram(aes(gene_expression), bins = 10, color = "black", fill = "firebrick3")+
-  labs(title = "The Expression Level of CD24 Gene", x = "Expression", y  = "Frequency")+
-  MyTheme 
+  geom_histogram(aes(gene_expression),bins = 20, color = "black", fill = "firebrick3")+
+  labs(x = "Expression", y  = "Frequency")+
+  MyTheme +
+  annotate(geom = "text", x = 200, y = 63, label = paste("The Mean(SD) Expression Level of CD24 Gene",":", MeanCD24,"(", SDCD24,")"), color ="black")
+  
+
 
 plot(Histogram)
+
 ```
 
 ```{r}
 # Scatterplot for gene expression and continuous covariate
-# Selected age as continuous covariate
-# Create a colorpalette
+# Here, I selected age as the continuous covariate
+# To show the expression pattern, I created an age group. Here, I used some code suggestions from community.rstudio.
 
-ColorPalette_scatter<- c ("firebrick3", "pink", "blue3", "purple", "gold")
-
-Scatterplot <- ggplot(CD24_expression, aes(x = age, y = gene_expression, color = age_group))+
-  geom_point()+
-  MyTheme+
-  scale_color_manual(values = ColorPalette_scatter, name = "Age Group")+
-  labs(title = "The association of CD24 expression and age", x = "Age", y = "CD24 expression")
-plot(Scatterplot)
-
-```
-
-```{r}
-# Boxplot of gene expression separated by both continuous covariates
-# Code suggestions for age group is from community.rstudio
 # First change age >89 values to age =  90
 CD24_expression$age[CD24_expression$age==" >89"]<- "90"
+
 # Check the change of the value
 CD24_expression$age
+
 # Convert age values from character to numeric values
 CD24_expression$age<- as.numeric(CD24_expression$age)
 
@@ -135,19 +139,49 @@ CD24_expression<- CD24_expression %>%
 # Check the inclusion of age_group
 CD24_expression$age_group
 
-    
+# Now, create a colorpalette
 
-# Now create a category named GeneExpressionGroup from the gene_expression values
+ColorPalette_scatter<- c ("firebrick3", "pink", "blue3", "purple", "gold")
 
-CD24_expression$GeneExpressionGroup<- cut(CD24_expression$gene_expression, breaks = c (0,20,80,120,527),
-                                          labels = c("<40", "40-80", "80-120", ">120"))
-                        
+# Calculating mean, standard deviation for the variable age
 
+MeanAge <- round(mean(CD24_expression$age), digits = 1)
+MedianAge<- round(median(CD24_expression$age), digits = 1)
+
+# Generate the scatterplot
+Scatterplot <- ggplot(CD24_expression, aes(x = age, y = gene_expression, color = age_group))+
+  geom_point()+
+  MyTheme+
+  scale_color_manual(values = ColorPalette_scatter, name = "Age Group")+
+  labs(title = "The association of CD24 expression and age", x = paste("Age", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = "CD24 expression")
+
+
+plot(Scatterplot)
+
+
+```
+
+```{r}
+# Boxplot of gene expression separated by both categorical covariates.
+# For the two categorical covariates, I have selected sex and mechanical_ventilation
+
+# Calculate the number of each sex
+table(CD24_expression$sex)
+
+# calculate the number for ventilation or not
+table(CD24_expression$mechanical_ventilation)
+
+# First, create a colorpalette for this plot
+colorpalette_boxplot<- harrypotter::harrypotter(n = 2, house = "Ravenclaw")
+
+# Now, generate the boxplot
+Boxplot <- ggplot(CD24_expression, aes(x = sex, y = gene_expression, fill = CD24_expression$mechanical_ventilation))+
+  geom_boxplot() +
+  MyTheme+
+  scale_fill_manual (values = colorpalette_boxplot, name = "Mechanical Ventilation", labels = c("No(74)", "Yes(51)"))+
+  labs(title = "The Association CD24 Expression With Sex And Mechanical Ventilation", y = "CD24 Expression")+
+  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(73)", "Unknown(1)"))
   
-Boxplot <- ggplot(CD24_expression, aes(x = sex, y = gene_expression, fill = CD24_expression$mechanical_ventilation ))+
-  geom_boxplot()
- 
-
 plot(Boxplot)
 
 ```
