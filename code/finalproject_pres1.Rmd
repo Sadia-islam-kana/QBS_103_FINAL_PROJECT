@@ -1,8 +1,5 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
+
+
 # Final project presentation 1
 
 
@@ -28,9 +25,8 @@ Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metad
 
 # Loak at both the csv files using head function
 
-head(GeneExpression_data)
-head(Metadata)
-
+  head(GeneExpression_data)
+  head(Metadata)
 ```
 
 ```{r}
@@ -39,7 +35,7 @@ colnames(GeneExpression_data) [1]<- "Genes"
 
 # Check the renaming
 
-head(GeneExpression_data)
+  head(GeneExpression_data)
 
 ```
 
@@ -50,7 +46,7 @@ longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
 
 # Check the long format conversion
 
-head(longData)
+  head(longData)
 
 ```
 
@@ -61,8 +57,8 @@ LinkedData<- merge(longData, Metadata, by = "participant_id")
 
 # View the linked data
 
-head(LinkedData)
-tail(LinkedData)
+  head(LinkedData)
+  tail(LinkedData)
 
 ```
 
@@ -98,10 +94,9 @@ Histogram<- ggplot(CD24_expression) +
   geom_histogram(aes(gene_expression),bins = 20, color = "black", fill = "firebrick3")+
   labs(x = "Expression", y  = "Frequency")+
   MyTheme +
-  annotate(geom = "text", x = 200, y = 63, label = paste("The Mean(SD) Expression Level of CD24 Gene",":", MeanCD24,"(", SDCD24,")"), color ="black")
+  annotate(geom = "text", x = 200, y = 63, label = paste("The Mean(SD) Expression Level of CD24 Gene",":", MeanCD24,"(", SDCD24,")"), color ="black", size = 4)+
+  theme(text = element_text(size = 11))
   
-
-
 plot(Histogram)
 
 ```
@@ -115,7 +110,7 @@ plot(Histogram)
 CD24_expression$age[CD24_expression$age==" >89"]<- "90"
 
 # Check the change of the value
-CD24_expression$age
+  CD24_expression$age
 
 # Convert age values from character to numeric values
 CD24_expression$age<- as.numeric(CD24_expression$age)
@@ -137,7 +132,7 @@ CD24_expression<- CD24_expression %>%
      ))
     
 # Check the inclusion of age_group
-CD24_expression$age_group
+  CD24_expression$age_group
 
 # Now, create a colorpalette
 
@@ -153,7 +148,9 @@ Scatterplot <- ggplot(CD24_expression, aes(x = age, y = gene_expression, color =
   geom_point()+
   MyTheme+
   scale_color_manual(values = ColorPalette_scatter, name = "Age Group")+
-  labs(title = "The association of CD24 expression and age", x = paste("Age", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = "CD24 expression")
+  labs( x = paste("Age", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = "CD24 expression")+
+  theme(text = element_text(size = 11))+
+  annotate(geom = "text", label = "The association of CD24 expression and age", x = 55, y = 600, size = 5)
 
 
 plot(Scatterplot)
@@ -179,8 +176,9 @@ Boxplot <- ggplot(CD24_expression, aes(x = sex, y = gene_expression, fill = CD24
   geom_boxplot() +
   MyTheme+
   scale_fill_manual (values = colorpalette_boxplot, name = "Mechanical Ventilation", labels = c("No(74)", "Yes(51)"))+
-  labs(title = "The Association CD24 Expression With Sex And Mechanical Ventilation", y = "CD24 Expression")+
-  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(73)", "Unknown(1)"))
+  labs(title = "The Association Of CD24 Expression With Sex And Mechanical Ventilation", y = "CD24 Expression")+
+  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(73)", "Unknown(1)"))+
+  theme(text = element_text(size = 10))
   
 plot(Boxplot)
 
