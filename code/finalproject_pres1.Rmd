@@ -92,14 +92,15 @@ MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blan
 
 MeanCD24 <- round(mean(CD24_expression$gene_expression), digits = 1)
 SDCD24<- round(sd(CD24_expression$gene_expression), digits = 1)
-
+IQR_CD24 <- round(IQR(CD24_expression$gene_expression), digits = 1)
+MedianCD24 <- round(median(CD24_expression$gene_expression), digits = 1)
 
 # Now Generate histogram for CD24 expression
 Histogram<- ggplot(CD24_expression) +
   geom_histogram(aes(gene_expression),bins = 20, color = "black", fill = "firebrick3")+
   labs(x = "Expression", y  = "Frequency")+
   MyTheme +
-  annotate(geom = "text", x = 200, y = 63, label = paste("The Mean(SD) Expression Level of CD24 Gene",":", MeanCD24,"(", SDCD24,")"), color ="black", size = 4)+
+  annotate(geom = "text", x = 200, y = 63, label = paste("The Median (IQR) Expression Level of CD24 Gene",":", MedianCD24,"(", IQR_CD24,")"), color ="black", size = 4)+
   theme(text = element_text(size = 11))
   
 plot(Histogram)
