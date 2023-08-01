@@ -1,0 +1,241 @@
+---
+title: "FinalProject_presentation2"
+author: "sadia kana"
+date: "2023-07-30"
+output: html_document
+---
+
+# Final project presentation 2
+
+```{r}
+# Load the necessary libraries
+library(tidyverse)
+library(reshape2)
+library(wesanderson)
+library(harrypotter)
+library(ggpubr)
+library(tagger)
+
+library(tidyr)
+library(dplyr)
+
+```
+
+
+```{r}
+# Load the gene expression data and metadata
+GeneExpression_data<- read.csv(file = "/Users/Student1/Downloads/QBS103_finalProject_geneExpression.csv")
+Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv")
+
+# Loak at both the csv files using head function
+
+  head(GeneExpression_data)
+  head(Metadata)
+```
+
+```{r}
+# Rename the first column of GeneExpression_data
+colnames(GeneExpression_data) [1]<- "Genes"
+
+# Check the renaming
+
+  head(GeneExpression_data)
+```
+
+
+
+```{r}
+# Convert the gene expression data into long format
+longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
+                          value.name = "gene_expression", variable.name = "participant_id")
+
+# Check the long format conversion
+
+  head(longData)
+
+```
+
+```{r}
+# Link longData with Metadata
+
+LinkedData<- merge(longData, Metadata, by = "participant_id")
+
+# View the linked data
+
+  head(LinkedData)
+  tail(LinkedData)
+  
+```
+
+
+● Build a function to create the plots you made for Presentation 1, incorporating feedback you received from your first presentation on improving plot design (10 pts)
+Functions should take the following input:
+○ The name of a data frame
+○ A list of 1 or more gene names
+○ A list of 1 or more continuous covariates
+○ A list of 2 categorical covariates
+
+
+```{r}
+# A data frame name - LinkedData
+# A list of one or more genes
+GeneList = c("CD24")
+Con.cov_List = c("age")
+cat.cov_List = c ("sex", "mechanical_ventilation")
+
+function_pres <- function(data, GeneList, Con.cov_List, cat.cov_List){
+ 
+  # Subset the data for a particular gene
+  for (i in 1:1){
+  gene <- GeneList[[i]]
+
+    # Subset data for the gene
+  Gene_data<- data[data$Gene == gene, ]
+
+  #first generate a theme
+  MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+  
+  ## Calculating mean, standard deviation of gene
+  
+IQR_gene <- round(IQR( Gene_data$gene_expression), digits = 1)
+MedianGene <- round(median( Gene_data$gene_expression), digits = 1)
+
+#Generate a loop for continuous covariate
+for (x in 1:1) {
+  con.list <- Con.cov_List[[x]]
+  con.cov <- Gene_data[[con.list]]
+
+# Calculating mean, standard deviation for con.cov
+
+#MeanCon <- round(mean(con.cov)), digits = 1)
+#MedianCon<- round(median(con.cov), digits = 1)
+  
+# Selecting categorical covariate 1 and 2
+  cat.list1 <- cat.cov_List[[1]]
+  cat.list2 <- cat.cov_List[[2]]
+  cat.cov1<- Gene_data[[cat.list1]]
+  cat.cov2<- Gene_data[[cat.list2]]
+
+# Creating histogram
+Histogram<- ggplot( Gene_data) +
+  geom_histogram(aes(gene_expression),bins = 20, color = "black", fill = "firebrick3")+
+  labs(x = paste(gene, "Expression"), y  = "Participant Number")+
+  MyTheme +
+  annotate(geom = "text", x = 200, y = 63, label = paste("The Median (IQR) Expression Level of", {{gene}},":", MedianGene,"(", IQR_gene,")"), color ="black", size = 4)+
+  theme(text = element_text(size = 11))
+  
+plot(Histogram)
+
+# Generate the scatterplot
+Scatterplot <- ggplot( Gene_data, aes(x = as.numeric({{con.cov}}), y = gene_expression))+
+  geom_point(color = "red", fill = "white")+
+  MyTheme+
+  labs( x = paste("con.cov", "(", "mean", "=", MeanCon <- round(mean(as.numeric(Gene_data$con.cov)), digits = 1),",", "median","=", MedianCon<- round(median(as.numeric(Gene_data$con.cov)), digits = 1),")"), y = paste(gene, "expression"))+
+  theme(text = element_text(size = 11))+
+  annotate(geom = "text", label = paste("The association of", gene, "expression and", "continous covariate"), x = 55, y = 600, size = 5)
+
+
+plot(Scatterplot)
+
+# Now, generate the boxplot
+
+Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+  geom_boxplot() +
+  MyTheme+
+  #scale_fill_manual (name = "cat.cov2", labels = c("No(75)", "Yes(51)"))+
+  labs(title = paste("The Association Of",gene, "Expression With", "cat.cov1", "And","cat.cov2"), y = paste("gene", "Expression"))+
+  scale_x_discrete(name = "cat.cov1", labels =c( "Female(51)", "Male(74)", "Unknown(1)"))+
+  theme(text = element_text(size = 10))
+plot(Boxplot)
+}
+}
+}
+
+
+#### creating function in a loop
+function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
+
+ 
+```
+
+```{r}
+# A data frame name - LinkedData
+# A list of one or more genes
+GeneList = c("CD24", "BPI", "VWF")
+Con.cov_List = c("age", "ferritin.ng.ml.")
+cat.cov_List = c ("sex", "mechanical_ventilation")
+
+function_pres <- function(data, GeneList, Con.cov_List, cat.cov_List){
+ 
+  # Subset the data for a particular gene
+  for (i in 1:3){
+  gene <- GeneList[[i]]
+
+    # Subset data for the gene
+  Gene_data<- data[data$Gene == gene, ]
+
+  #first generate a theme
+  MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+  
+  ## Calculating mean, standard deviation of gene
+  
+IQR_gene <- round(IQR( Gene_data$gene_expression), digits = 1)
+MedianGene <- round(median( Gene_data$gene_expression), digits = 1)
+
+#Generate a loop for continuous covariate
+for (x in 1:2) {
+  con.list <- Con.cov_List[[x]]
+  con.cov <- Gene_data[[con.list]]
+
+# Calculating mean, standard deviation for con.cov
+
+#MeanCon <- round(mean(con.cov)), digits = 1)
+#MedianCon<- round(median(con.cov), digits = 1)
+  
+# Selecting categorical covariate 1 and 2
+  cat.list1 <- cat.cov_List[[1]]
+  cat.list2 <- cat.cov_List[[2]]
+  cat.cov1<- Gene_data[[cat.list1]]
+  cat.cov2<- Gene_data[[cat.list2]]
+
+# Creating histogram
+Histogram<- ggplot( Gene_data) +
+  geom_histogram(aes(gene_expression),bins = 20, color = "black", fill = "firebrick3")+
+  labs(x = paste(gene, "Expression"), y  = "Participant Number")+
+  MyTheme +
+  annotate(geom = "text", x = 200, y = 63, label = paste("The Median (IQR) Expression Level of", {{gene}},":", MedianGene,"(", IQR_gene,")"), color ="black", size = 4)+
+  theme(text = element_text(size = 11))
+  
+plot(Histogram)
+
+# Generate the scatterplot
+Scatterplot <- ggplot( Gene_data, aes(x = as.numeric({{con.cov}}), y = gene_expression))+
+  geom_point(color = "red", fill = "white")+
+  MyTheme+
+  labs( x = paste("con.cov", "(", "mean", "=", MeanCon <- round(mean(as.numeric(Gene_data$con.cov)), digits = 1),",", "median","=", MedianCon<- round(median(as.numeric(Gene_data$con.cov)), digits = 1),")"), y = paste(gene, "expression"))+
+  theme(text = element_text(size = 11))+
+  annotate(geom = "text", label = paste("The association of", gene, "expression and", "continous covariate"), x = 55, y = 600, size = 5)
+
+
+plot(Scatterplot)
+
+# Now, generate the boxplot
+
+Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+  geom_boxplot() +
+  MyTheme+
+  #scale_fill_manual (name = "cat.cov2", labels = c("No(75)", "Yes(51)"))+
+  labs(title = paste("The Association Of",gene, "Expression With", "cat.cov1", "And","cat.cov2"), y = paste("gene", "Expression"))+
+  scale_x_discrete(name = "cat.cov1", labels =c( "Female(51)", "Male(74)", "Unknown(1)"))+
+  theme(text = element_text(size = 10))
+plot(Boxplot)
+}
+}
+}
+
+
+#### creating function in a loop
+function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
+
+```
+
