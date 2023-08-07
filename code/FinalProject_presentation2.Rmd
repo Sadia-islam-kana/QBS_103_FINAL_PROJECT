@@ -243,4 +243,145 @@ plot(Boxplot)
 function_pres_two(LinkedData,GeneList2 , Con.cov_List2, cat.cov_List2)
 
 ```
+`
+
+```{r}
+#  The data frame is LinkedData
+# Adding two more genes to the list of genes
+GeneList2 = c("CD24","BPI", "AASDHPPT")
+
+# Adding one more continuous covariate to the continuous covariate list
+Con.cov_List2 = c("age","ferritin.ng.ml." )
+
+# A list of two categorical covariates
+cat.cov_List2 = c ("sex", "mechanical_ventilation")
+
+# Generating the function
+
+function_pres_newedited <- function(data, GeneList, Con.cov_List, cat.cov_List){
+ 
+  
+  # Subset the data for a particular gene
+  for (i in 1:3){
+  gene <- GeneList[[i]]
+
+    # Subset data for the gene
+  Gene_data<- data[data$Gene == gene, ]
+  
+  #Generate a loop for continuous covariate
+for (x in 1:2) {
+  con.list <- Con.cov_List[[x]]
+  con.cov <- as.numeric(Gene_data[[con.list]])
+     
+  if(con.list == Con.cov_List[[1]]){
+
+  # Now generate a theme
+  MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+  
+# Calculating mean, standard deviation for con.cov
+
+MeanCon <- round(mean(con.cov, digits = 1, na.rm = T))
+MedianCon<- round(median(con.cov, digits = 1, na.rm = T))
+  
+# Selecting categorical covariate 1 and 2
+  cat.list1 <- cat.cov_List[[1]]
+  cat.list2 <- cat.cov_List[[2]]
+  cat.cov1<- Gene_data[[cat.list1]]
+  cat.cov2<- Gene_data[[cat.list2]]
+  
+    
+# Creating histogram
+Histogram<- ggplot( Gene_data) +
+  geom_histogram(aes(gene_expression),bins = 20, color = "gold2", fill = "gold")+
+  labs(title = substitute(paste("The Expression Level of"," ", italic(gene)," ", "gene")),x = substitute(paste(italic(gene)," ", "expression")), y  = "Participant number")+
+  MyTheme +
+  theme(text = element_text(size = 10))+
+  geom_vline(aes(xintercept = median(Gene_data$gene_expression))) +
+  theme(plot.title = element_text(hjust = .35))
+  
+plot(Histogram)
+
+# Generate the scatterplot
+Scatterplot <- ggplot( Gene_data, aes(x = {{con.cov}}, y = gene_expression))+
+  geom_point(color = "red", alpha = .5, size = 3)+
+  MyTheme+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression and"," ", con.list)) ,x = substitute(paste("Age in yrs"," ", " ", "(", "mean", "=", MeanCon,","," ", "median","=", MedianCon,")")), y = substitute(paste(italic(gene)," ", "expression")))+
+  theme(text = element_text(size = 11)) + 
+  theme(plot.title = element_text(hjust = .35))
+
+plot(Scatterplot)
+
+# Now, generate the boxplot
+
+Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+  geom_boxplot() +
+  MyTheme+
+  scale_fill_manual(values = c("blue3","firebrick"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression with ", cat.list1," ", "and"," ", cat.list2)), y = substitute(paste(italic(gene)," ", "Expression")))+
+  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)", "Unknown(1)"))+
+  theme(text = element_text(size = 10))
+
+#Boxploy<- Box + str_to_title()
+plot(Boxplot)
+  }
+  
+  else {
+
+     # Now generate a theme
+  MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+  
+# Calculating mean, standard deviation for con.cov
+
+MeanCon <- round(mean(con.cov, digits = 1, na.rm = T))
+MedianCon<- round(median(con.cov, digits = 1, na.rm = T))
+  
+# Selecting categorical covariate 1 and 2
+  cat.list1 <- cat.cov_List[[1]]
+  cat.list2 <- cat.cov_List[[2]]
+  cat.cov1<- Gene_data[[cat.list1]]
+  cat.cov2<- Gene_data[[cat.list2]]
+  
+       
+# Creating histogram
+Histogram<- ggplot( Gene_data) +
+  geom_histogram(aes(gene_expression),bins = 20, color = "gold2", fill = "gold")+
+  labs(title = substitute(paste("The Expression Level of"," ", italic(gene)," ", "gene")),x = substitute(paste(italic(gene)," ", "expression")), y  = "Participant number")+
+  MyTheme +
+  theme(text = element_text(size = 10))+
+  geom_vline(aes(xintercept = median(Gene_data$gene_expression))) +
+  theme(plot.title = element_text(hjust = .35))
+  
+plot(Histogram)
+
+# Generate the scatterplot
+Scatterplot <- ggplot( Gene_data, aes(x = {{con.cov}}, y = gene_expression))+
+  geom_point(color = "red", alpha = .5, size = 3)+
+  MyTheme+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression and"," ", "Ferritin")) ,x = substitute(paste("Ferritin (ng/ml)"," ", " ", "(", "mean", "=", MeanCon,","," ", "median","=", MedianCon,")")), y = substitute(paste(italic(gene)," ", "expression")))+
+  theme(text = element_text(size = 11)) + 
+  theme(plot.title = element_text(hjust = .35))
+
+plot(Scatterplot)
+
+# Now, generate the boxplot
+
+Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+  geom_boxplot() +
+  MyTheme+
+  scale_fill_manual(values = c("blue3","firebrick"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression with ", cat.list1," ", "and"," ", cat.list2)), y = substitute(paste(italic(gene)," ", "Expression")))+
+  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)", "Unknown(1)"))+
+  theme(text = element_text(size = 10))
+
+#Boxploy<- Box + str_to_title()
+plot(Boxplot)
+    
+  }
+}
+  }
+}
+
+function_pres_newedited(LinkedData,GeneList2 , Con.cov_List2, cat.cov_List2)
+
+```
 
