@@ -258,7 +258,7 @@ cat.cov_List2 = c ("sex", "mechanical_ventilation")
 
 # Generating the function
 
-function_pres_newedited <- function(data, GeneList, Con.cov_List, cat.cov_List){
+function_pres_newest <- function(data, GeneList, Con.cov_List, cat.cov_List){
  
   
   # Subset the data for a particular gene
@@ -381,7 +381,7 @@ plot(Boxplot)
   }
 }
 
-function_pres_newedited(LinkedData,GeneList2 , Con.cov_List2, cat.cov_List2)
+function_pres_newest(LinkedData,GeneList2 , Con.cov_List2, cat.cov_List2)
 
 ```
 
