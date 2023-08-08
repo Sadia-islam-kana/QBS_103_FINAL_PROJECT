@@ -5,6 +5,7 @@ date: "2023-07-30"
 output:
   pdf_document: default
   html_document: default
+  latex_engine: xelatex
 ---
 
 # Final project presentation 2
@@ -30,8 +31,8 @@ Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metad
 
 # Loak at both the csv files using head function
 
-  head(GeneExpression_data)
-  head(Metadata)
+  #head(GeneExpression_data)
+  #head(Metadata)
 ```
 
 ```{r}
@@ -40,7 +41,7 @@ colnames(GeneExpression_data) [1]<- "Genes"
 
 # Check the renaming
 
-  head(GeneExpression_data)
+  #head(GeneExpression_data)
 ```
 
 
@@ -52,7 +53,7 @@ longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
 
 # Check the long format conversion
 
-  head(longData)
+  #head(longData)
 
 ```
 
@@ -63,8 +64,8 @@ LinkedData<- merge(longData, Metadata, by = "participant_id")
 
 # View the linked data
 
-  head(LinkedData)
-  tail(LinkedData)
+ # head(LinkedData)
+ # tail(LinkedData)
   
 ```
 

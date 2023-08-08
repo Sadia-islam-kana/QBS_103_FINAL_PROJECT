@@ -1,0 +1,714 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={FinalProject\_presentation2},
+  pdfauthor={sadia kana},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{FinalProject\_presentation2}
+\author{sadia kana}
+\date{2023-07-30}
+
+\begin{document}
+\maketitle
+
+\hypertarget{final-project-presentation-2}{%
+\section{Final project presentation
+2}\label{final-project-presentation-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the necessary libraries}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.2     v readr     2.1.4
+## v forcats   1.0.0     v stringr   1.5.0
+## v ggplot2   3.4.2     v tibble    3.2.1
+## v lubridate 1.9.2     v tidyr     1.3.0
+## v purrr     1.0.1     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(reshape2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'reshape2'
+## 
+## The following object is masked from 'package:tidyr':
+## 
+##     smiths
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(wesanderson)}
+\FunctionTok{library}\NormalTok{(harrypotter)}
+\FunctionTok{library}\NormalTok{(ggpubr)}
+\FunctionTok{library}\NormalTok{(tagger)}
+
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load the gene expression data and metadata}
+\NormalTok{GeneExpression\_data}\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\AttributeTok{file =} \StringTok{"/Users/Student1/Downloads/QBS103\_finalProject\_geneExpression.csv"}\NormalTok{)}
+\NormalTok{Metadata}\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\AttributeTok{file =}  \StringTok{"/Users/Student1/Downloads/QBS103\_finalProject\_metadata.csv"}\NormalTok{)}
+
+\CommentTok{\# Loak at both the csv files using head function}
+
+  \CommentTok{\#head(GeneExpression\_data)}
+  \CommentTok{\#head(Metadata)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Rename the first column of GeneExpression\_data}
+\FunctionTok{colnames}\NormalTok{(GeneExpression\_data) [}\DecValTok{1}\NormalTok{]}\OtherTok{\textless{}{-}} \StringTok{"Genes"}
+
+\CommentTok{\# Check the renaming}
+
+  \CommentTok{\#head(GeneExpression\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert the gene expression data into long format}
+\NormalTok{longData}\OtherTok{\textless{}{-}}\NormalTok{ reshape2}\SpecialCharTok{::}\FunctionTok{melt}\NormalTok{(GeneExpression\_data, }\AttributeTok{id.vars =}\NormalTok{ (}\StringTok{"Genes"}\NormalTok{),}
+                          \AttributeTok{value.name =} \StringTok{"gene\_expression"}\NormalTok{, }\AttributeTok{variable.name =} \StringTok{"participant\_id"}\NormalTok{)}
+
+\CommentTok{\# Check the long format conversion}
+
+  \CommentTok{\#head(longData)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Link longData with Metadata}
+
+\NormalTok{LinkedData}\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(longData, Metadata, }\AttributeTok{by =} \StringTok{"participant\_id"}\NormalTok{)}
+
+\CommentTok{\# View the linked data}
+
+ \CommentTok{\# head(LinkedData)}
+ \CommentTok{\# tail(LinkedData)}
+\end{Highlighting}
+\end{Shaded}
+
+● Build a function to create the plots you made for Presentation 1,
+incorporating feedback you received from your first presentation on
+improving plot design (10 pts) Functions should take the following
+input: ○ The name of a data frame ○ A list of 1 or more gene names ○ A
+list of 1 or more continuous covariates ○ A list of 2 categorical
+covariates
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# A data frame name {-} LinkedData}
+\CommentTok{\# A list of one or more genes}
+\NormalTok{GeneList }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"CD24"}\NormalTok{)}
+
+\CommentTok{\# A list for one or more continuous covariates}
+\NormalTok{Con.cov\_List }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{)}
+
+\CommentTok{\# A list of two categorical covariates}
+\NormalTok{cat.cov\_List }\OtherTok{=} \FunctionTok{c}\NormalTok{ (}\StringTok{"sex"}\NormalTok{, }\StringTok{"mechanical\_ventilation"}\NormalTok{)}
+
+\CommentTok{\# Generating the function}
+
+\NormalTok{function\_pres }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, GeneList, Con.cov\_List, cat.cov\_List)\{}
+ 
+  \CommentTok{\# Selecting the gene from genelist}
+  
+\NormalTok{  gene }\OtherTok{\textless{}{-}}\NormalTok{ GeneList[[}\DecValTok{1}\NormalTok{]]}
+
+    \CommentTok{\# Subset data for the gene}
+\NormalTok{  Gene\_data}\OtherTok{\textless{}{-}}\NormalTok{ data[data}\SpecialCharTok{$}\NormalTok{Gene }\SpecialCharTok{==}\NormalTok{ gene, ]}
+
+  \CommentTok{\# Now generate a theme}
+\NormalTok{  MyTheme }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{panel.border =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{axis.line =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linewidth =} \FunctionTok{rel}\NormalTok{(}\DecValTok{1}\NormalTok{)), }\AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{panel.background =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{legend.key =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+  
+
+\CommentTok{\# select the continuous covariate}
+\NormalTok{  con.list }\OtherTok{\textless{}{-}}\NormalTok{ Con.cov\_List[[}\DecValTok{1}\NormalTok{]]}
+\CommentTok{\# Convert the continous covariate into numeric form}
+\NormalTok{  con.cov }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(Gene\_data[[con.list]])}
+
+\CommentTok{\# Calculating mean, standard deviation for con.cov}
+
+\NormalTok{MeanCon }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+\NormalTok{MedianCon}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{median}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+  
+\CommentTok{\# Selecting categorical covariate 1 and 2}
+\NormalTok{  cat.list1 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{  cat.list2 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{2}\NormalTok{]]}
+\NormalTok{  cat.cov1}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list1]]}
+\NormalTok{  cat.cov2}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list2]]}
+
+\CommentTok{\# Creating histogram}
+\NormalTok{Histogram}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(gene\_expression),}\AttributeTok{bins =} \DecValTok{20}\NormalTok{, }\AttributeTok{color =} \StringTok{"gold2"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"gold"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The Expression Level of"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"gene"}\NormalTok{)),}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)), }\AttributeTok{y  =} \StringTok{"Participant number"}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{median}\NormalTok{(Gene\_data}\SpecialCharTok{$}\NormalTok{gene\_expression))) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+  
+\FunctionTok{plot}\NormalTok{(Histogram)}
+
+\CommentTok{\# Generate the scatterplot}
+\NormalTok{Scatterplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{con.cov\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression))}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{alpha =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression and"}\NormalTok{,}\StringTok{" "}\NormalTok{, con.list)) ,}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(con.list,}\StringTok{" "}\NormalTok{,}\StringTok{"in yrs"}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"("}\NormalTok{, }\StringTok{"mean"}\NormalTok{, }\StringTok{"="}\NormalTok{, MeanCon,}\StringTok{","}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{"median"}\NormalTok{,}\StringTok{"="}\NormalTok{, MedianCon,}\StringTok{")"}\NormalTok{)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{11}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+
+\FunctionTok{plot}\NormalTok{(Scatterplot)}
+
+\CommentTok{\# Now, generate the boxplot}
+
+\NormalTok{Boxplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{cat.cov1\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression, }\AttributeTok{fill =}\NormalTok{ \{\{cat.cov2\}\}))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"blue3"}\NormalTok{,}\StringTok{"firebrick"}\NormalTok{),}\AttributeTok{name =}\NormalTok{ cat.list2, }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No(75)"}\NormalTok{, }\StringTok{"Yes(51)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression with "}\NormalTok{, cat.list1,}\StringTok{" "}\NormalTok{, }\StringTok{"and"}\NormalTok{,}\StringTok{" "}\NormalTok{, cat.list2)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"Expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{name =}\NormalTok{ cat.list1, }\AttributeTok{labels =}\FunctionTok{c}\NormalTok{( }\StringTok{"Female(51)"}\NormalTok{, }\StringTok{"Male(74)"}\NormalTok{, }\StringTok{"Unknown(1)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}
+
+\CommentTok{\#Boxploy\textless{}{-} Box + str\_to\_title()}
+\FunctionTok{plot}\NormalTok{(Boxplot)}
+\NormalTok{\}}
+
+
+\FunctionTok{function\_pres}\NormalTok{(LinkedData,GeneList , Con.cov\_List, cat.cov\_List)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in function_pres(LinkedData, GeneList, Con.cov_List, cat.cov_List): NAs
+## introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-6-2.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+\#Select one additional continuous covariate and 2 additional genes to
+look at and implement a loop to generate your figures using the function
+you created
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#  The data frame is LinkedData}
+\CommentTok{\# Adding two more genes to the list of genes}
+\NormalTok{GeneList2 }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"CD24"}\NormalTok{,}\StringTok{"BPI"}\NormalTok{, }\StringTok{"AASDHPPT"}\NormalTok{)}
+
+\CommentTok{\# Adding one more continuous covariate to the continuous covariate list}
+\NormalTok{Con.cov\_List2 }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{,}\StringTok{"ferritin.ng.ml."}\NormalTok{ )}
+
+\CommentTok{\# A list of two categorical covariates}
+\NormalTok{cat.cov\_List2 }\OtherTok{=} \FunctionTok{c}\NormalTok{ (}\StringTok{"sex"}\NormalTok{, }\StringTok{"mechanical\_ventilation"}\NormalTok{)}
+
+\CommentTok{\# Generating the function}
+
+\NormalTok{function\_pres\_two }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, GeneList, Con.cov\_List, cat.cov\_List)\{}
+ 
+  \CommentTok{\# Subset the data for a particular gene}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)\{}
+\NormalTok{  gene }\OtherTok{\textless{}{-}}\NormalTok{ GeneList[[i]]}
+
+    \CommentTok{\# Subset data for the gene}
+\NormalTok{  Gene\_data}\OtherTok{\textless{}{-}}\NormalTok{ data[data}\SpecialCharTok{$}\NormalTok{Gene }\SpecialCharTok{==}\NormalTok{ gene, ]}
+
+  \CommentTok{\# Now generate a theme}
+\NormalTok{  MyTheme }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{panel.border =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{axis.line =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linewidth =} \FunctionTok{rel}\NormalTok{(}\DecValTok{1}\NormalTok{)), }\AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{panel.background =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{legend.key =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+  
+\CommentTok{\#Generate a loop for continuous covariate}
+\ControlFlowTok{for}\NormalTok{ (x }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{) \{}
+\NormalTok{  con.list }\OtherTok{\textless{}{-}}\NormalTok{ Con.cov\_List[[x]]}
+\NormalTok{  con.cov }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(Gene\_data[[con.list]])}
+
+\CommentTok{\# Calculating mean, standard deviation for con.cov}
+
+\NormalTok{MeanCon }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+\NormalTok{MedianCon}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{median}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+  
+\CommentTok{\# Selecting categorical covariate 1 and 2}
+\NormalTok{  cat.list1 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{  cat.list2 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{2}\NormalTok{]]}
+\NormalTok{  cat.cov1}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list1]]}
+\NormalTok{  cat.cov2}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list2]]}
+
+\CommentTok{\# Creating histogram}
+\NormalTok{Histogram}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(gene\_expression),}\AttributeTok{bins =} \DecValTok{20}\NormalTok{, }\AttributeTok{color =} \StringTok{"gold2"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"gold"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The Expression Level of"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"gene"}\NormalTok{)),}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)), }\AttributeTok{y  =} \StringTok{"Participant number"}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{median}\NormalTok{(Gene\_data}\SpecialCharTok{$}\NormalTok{gene\_expression))) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+  
+\FunctionTok{plot}\NormalTok{(Histogram)}
+
+\CommentTok{\# Generate the scatterplot}
+\NormalTok{Scatterplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{con.cov\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression))}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{alpha =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression and"}\NormalTok{,}\StringTok{" "}\NormalTok{, con.list)) ,}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(con.list,}\StringTok{" "}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"("}\NormalTok{, }\StringTok{"mean"}\NormalTok{, }\StringTok{"="}\NormalTok{, MeanCon,}\StringTok{","}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{"median"}\NormalTok{,}\StringTok{"="}\NormalTok{, MedianCon,}\StringTok{")"}\NormalTok{)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{11}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+
+\FunctionTok{plot}\NormalTok{(Scatterplot)}
+
+\CommentTok{\# Now, generate the boxplot}
+
+\NormalTok{Boxplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{cat.cov1\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression, }\AttributeTok{fill =}\NormalTok{ \{\{cat.cov2\}\}))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"blue3"}\NormalTok{,}\StringTok{"firebrick"}\NormalTok{),}\AttributeTok{name =}\NormalTok{ cat.list2, }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No(75)"}\NormalTok{, }\StringTok{"Yes(51)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression with "}\NormalTok{, cat.list1,}\StringTok{" "}\NormalTok{, }\StringTok{"and"}\NormalTok{,}\StringTok{" "}\NormalTok{, cat.list2)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"Expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{name =}\NormalTok{ cat.list1, }\AttributeTok{labels =}\FunctionTok{c}\NormalTok{( }\StringTok{"Female(51)"}\NormalTok{, }\StringTok{"Male(74)"}\NormalTok{, }\StringTok{"Unknown(1)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}
+
+\CommentTok{\#Boxploy\textless{}{-} Box + str\_to\_title()}
+\FunctionTok{plot}\NormalTok{(Boxplot)}
+\NormalTok{\}}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\FunctionTok{function\_pres\_two}\NormalTok{(LinkedData,GeneList2 , Con.cov\_List2, cat.cov\_List2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-3.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-4.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-5.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-6.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-7.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-8.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-9.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-10.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-11.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-12.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-13.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-14.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_two(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-15.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-16.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-17.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-7-18.pdf}
+`
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#  The data frame is LinkedData}
+\CommentTok{\# Adding two more genes to the list of genes}
+\NormalTok{GeneList2 }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"CD24"}\NormalTok{,}\StringTok{"BPI"}\NormalTok{, }\StringTok{"AASDHPPT"}\NormalTok{)}
+
+\CommentTok{\# Adding one more continuous covariate to the continuous covariate list}
+\NormalTok{Con.cov\_List2 }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"age"}\NormalTok{,}\StringTok{"ferritin.ng.ml."}\NormalTok{ )}
+
+\CommentTok{\# A list of two categorical covariates}
+\NormalTok{cat.cov\_List2 }\OtherTok{=} \FunctionTok{c}\NormalTok{ (}\StringTok{"sex"}\NormalTok{, }\StringTok{"mechanical\_ventilation"}\NormalTok{)}
+
+\CommentTok{\# Generating the function}
+
+\NormalTok{function\_pres\_newest }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(data, GeneList, Con.cov\_List, cat.cov\_List)\{}
+ 
+  
+  \CommentTok{\# Subset the data for a particular gene}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)\{}
+\NormalTok{  gene }\OtherTok{\textless{}{-}}\NormalTok{ GeneList[[i]]}
+
+    \CommentTok{\# Subset data for the gene}
+\NormalTok{  Gene\_data}\OtherTok{\textless{}{-}}\NormalTok{ data[data}\SpecialCharTok{$}\NormalTok{Gene }\SpecialCharTok{==}\NormalTok{ gene, ]}
+  
+  \CommentTok{\#Generate a loop for continuous covariate}
+\ControlFlowTok{for}\NormalTok{ (x }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{) \{}
+\NormalTok{  con.list }\OtherTok{\textless{}{-}}\NormalTok{ Con.cov\_List[[x]]}
+\NormalTok{  con.cov }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(Gene\_data[[con.list]])}
+     
+  \ControlFlowTok{if}\NormalTok{(con.list }\SpecialCharTok{==}\NormalTok{ Con.cov\_List[[}\DecValTok{1}\NormalTok{]])\{}
+
+  \CommentTok{\# Now generate a theme}
+\NormalTok{  MyTheme }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{panel.border =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{axis.line =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linewidth =} \FunctionTok{rel}\NormalTok{(}\DecValTok{1}\NormalTok{)), }\AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{panel.background =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{legend.key =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+  
+\CommentTok{\# Calculating mean, standard deviation for con.cov}
+
+\NormalTok{MeanCon }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+\NormalTok{MedianCon}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{median}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+  
+\CommentTok{\# Selecting categorical covariate 1 and 2}
+\NormalTok{  cat.list1 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{  cat.list2 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{2}\NormalTok{]]}
+\NormalTok{  cat.cov1}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list1]]}
+\NormalTok{  cat.cov2}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list2]]}
+  
+    
+\CommentTok{\# Creating histogram}
+\NormalTok{Histogram}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(gene\_expression),}\AttributeTok{bins =} \DecValTok{20}\NormalTok{, }\AttributeTok{color =} \StringTok{"gold2"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"gold"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The Expression Level of"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"gene"}\NormalTok{)),}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)), }\AttributeTok{y  =} \StringTok{"Participant number"}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{median}\NormalTok{(Gene\_data}\SpecialCharTok{$}\NormalTok{gene\_expression))) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+  
+\FunctionTok{plot}\NormalTok{(Histogram)}
+
+\CommentTok{\# Generate the scatterplot}
+\NormalTok{Scatterplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{con.cov\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression))}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{alpha =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression and"}\NormalTok{,}\StringTok{" "}\NormalTok{, con.list)) ,}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Age in yrs"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"("}\NormalTok{, }\StringTok{"mean"}\NormalTok{, }\StringTok{"="}\NormalTok{, MeanCon,}\StringTok{","}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{"median"}\NormalTok{,}\StringTok{"="}\NormalTok{, MedianCon,}\StringTok{")"}\NormalTok{)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{11}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+
+\FunctionTok{plot}\NormalTok{(Scatterplot)}
+
+\CommentTok{\# Now, generate the boxplot}
+
+\NormalTok{Boxplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{cat.cov1\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression, }\AttributeTok{fill =}\NormalTok{ \{\{cat.cov2\}\}))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"blue3"}\NormalTok{,}\StringTok{"firebrick"}\NormalTok{),}\AttributeTok{name =} \StringTok{"Mechanical ventilation"}\NormalTok{, }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No(75)"}\NormalTok{, }\StringTok{"Yes(51)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression with "}\NormalTok{, cat.list1,}\StringTok{" "}\NormalTok{, }\StringTok{"and"}\NormalTok{,}\StringTok{" "}\NormalTok{, cat.list2)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"Expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"Sex"}\NormalTok{, }\AttributeTok{labels =}\FunctionTok{c}\NormalTok{( }\StringTok{"Female(51)"}\NormalTok{, }\StringTok{"Male(74)"}\NormalTok{, }\StringTok{"Unknown(1)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}
+
+\CommentTok{\#Boxploy\textless{}{-} Box + str\_to\_title()}
+\FunctionTok{plot}\NormalTok{(Boxplot)}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{else}\NormalTok{ \{}
+
+     \CommentTok{\# Now generate a theme}
+\NormalTok{  MyTheme }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{panel.border =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.major =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{axis.line =} \FunctionTok{element\_line}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linewidth =} \FunctionTok{rel}\NormalTok{(}\DecValTok{1}\NormalTok{)), }\AttributeTok{plot.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{panel.background =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{legend.key =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"white"}\NormalTok{), }\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{)}
+  
+\CommentTok{\# Calculating mean, standard deviation for con.cov}
+
+\NormalTok{MeanCon }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+\NormalTok{MedianCon}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{median}\NormalTok{(con.cov, }\AttributeTok{digits =} \DecValTok{1}\NormalTok{, }\AttributeTok{na.rm =}\NormalTok{ T))}
+  
+\CommentTok{\# Selecting categorical covariate 1 and 2}
+\NormalTok{  cat.list1 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{  cat.list2 }\OtherTok{\textless{}{-}}\NormalTok{ cat.cov\_List[[}\DecValTok{2}\NormalTok{]]}
+\NormalTok{  cat.cov1}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list1]]}
+\NormalTok{  cat.cov2}\OtherTok{\textless{}{-}}\NormalTok{ Gene\_data[[cat.list2]]}
+  
+       
+\CommentTok{\# Creating histogram}
+\NormalTok{Histogram}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(gene\_expression),}\AttributeTok{bins =} \DecValTok{20}\NormalTok{, }\AttributeTok{color =} \StringTok{"gold2"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"gold"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The Expression Level of"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"gene"}\NormalTok{)),}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)), }\AttributeTok{y  =} \StringTok{"Participant number"}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{median}\NormalTok{(Gene\_data}\SpecialCharTok{$}\NormalTok{gene\_expression))) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+  
+\FunctionTok{plot}\NormalTok{(Histogram)}
+
+\CommentTok{\# Generate the scatterplot}
+\NormalTok{Scatterplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{con.cov\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression))}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{alpha =}\NormalTok{ .}\DecValTok{5}\NormalTok{, }\AttributeTok{size =} \DecValTok{3}\NormalTok{)}\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression and"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{"Ferritin"}\NormalTok{)) ,}\AttributeTok{x =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Ferritin (ng/ml)"}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{" "}\NormalTok{, }\StringTok{"("}\NormalTok{, }\StringTok{"mean"}\NormalTok{, }\StringTok{"="}\NormalTok{, MeanCon,}\StringTok{","}\NormalTok{,}\StringTok{" "}\NormalTok{, }\StringTok{"median"}\NormalTok{,}\StringTok{"="}\NormalTok{, MedianCon,}\StringTok{")"}\NormalTok{)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{11}\NormalTok{)) }\SpecialCharTok{+} 
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =}\NormalTok{ .}\DecValTok{35}\NormalTok{))}
+
+\FunctionTok{plot}\NormalTok{(Scatterplot)}
+
+\CommentTok{\# Now, generate the boxplot}
+
+\NormalTok{Boxplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{( Gene\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ \{\{cat.cov1\}\}, }\AttributeTok{y =}\NormalTok{ gene\_expression, }\AttributeTok{fill =}\NormalTok{ \{\{cat.cov2\}\}))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+\NormalTok{  MyTheme}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"blue3"}\NormalTok{,}\StringTok{"firebrick"}\NormalTok{),}\AttributeTok{name =} \StringTok{"Mechanical ventilation"}\NormalTok{, }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No(75)"}\NormalTok{, }\StringTok{"Yes(51)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"The association of "}\NormalTok{, }\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"expression with "}\NormalTok{, cat.list1,}\StringTok{" "}\NormalTok{, }\StringTok{"and"}\NormalTok{,}\StringTok{" "}\NormalTok{, cat.list2)), }\AttributeTok{y =} \FunctionTok{substitute}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\FunctionTok{italic}\NormalTok{(gene),}\StringTok{" "}\NormalTok{, }\StringTok{"Expression"}\NormalTok{)))}\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"Sex"}\NormalTok{, }\AttributeTok{labels =}\FunctionTok{c}\NormalTok{( }\StringTok{"Female(51)"}\NormalTok{, }\StringTok{"Male(74)"}\NormalTok{, }\StringTok{"Unknown(1)"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{))}
+
+\CommentTok{\#Boxploy\textless{}{-} Box + str\_to\_title()}
+\FunctionTok{plot}\NormalTok{(Boxplot)}
+    
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\FunctionTok{function\_pres\_newest}\NormalTok{(LinkedData,GeneList2 , Con.cov\_List2, cat.cov\_List2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-2.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-3.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-4.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-5.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-6.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-7.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-8.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-9.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-10.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-11.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-12.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-13.pdf}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-14.pdf}
+
+\begin{verbatim}
+## Warning in function_pres_newest(LinkedData, GeneList2, Con.cov_List2,
+## cat.cov_List2): NAs introduced by coercion
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-15.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-16.pdf}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-17.pdf}
+\includegraphics{FinalProject_presentation2_files/figure-latex/unnamed-chunk-8-18.pdf}
+
+\end{document}
