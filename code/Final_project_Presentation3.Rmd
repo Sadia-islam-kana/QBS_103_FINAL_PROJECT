@@ -1,0 +1,124 @@
+---
+title: "Final project presentation 3"
+author: "sadia kana"
+date: "2023-08-14"
+output: pdf_document
+---
+
+## Final project presentation 3
+
+```{r}
+# Load the necessary libraries
+library(tidyverse)
+library(reshape2)
+library(wesanderson)
+library(harrypotter)
+library(ggpubr)
+library(tagger)
+
+library(tidyr)
+library(dplyr)
+library(pheatmap)
+library(knitr)
+library(kableExtra)
+library(gganimate)
+library(gapminder)
+library(gifski)
+
+```
+
+
+```{r}
+# Load the gene expression data and metadata
+GeneExpression_data<- read.csv(file = "/Users/Student1/Downloads/QBS103_finalProject_geneExpression.csv")
+Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv", stringsAsFactors = F, na.strings = ("unknown"))
+
+Metadata<- droplevels(na.omit(Metadata))
+
+# Loak at both the csv files using head function
+
+  head(GeneExpression_data)
+  head(Metadata)
+
+```
+
+
+```{r}
+# Rename the first column of GeneExpression_data
+colnames(GeneExpression_data) [1]<- "Genes"
+
+# Check the renaming
+
+  head(GeneExpression_data)
+```
+
+
+```{r}
+# Convert the gene expression data into long format
+longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
+                          value.name = "gene_expression", variable.name = "participant_id")
+
+# Check the long format conversion
+
+  head(longData)
+
+```
+
+
+```{r}
+# Link longData with Metadata
+
+LinkedData<- merge(longData, Metadata, by = "participant_id")
+
+# View the linked data
+
+  head(LinkedData)
+  tail(LinkedData)
+  
+```
+
+# Generate a table of summary statistics for all the covariates you looked at, stratifying by one of your categorical variables. Tables should report n (%) for categorical variables and mean (sd) or median [IQR] for continuous variables. (10 pts).
+
+```{r}
+
+
+```
+
+# Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns. (10 pts)
+
+```{r}
+genelist <- LinkedData$Genes[1:15]
+
+variance<- apply(LinkedData, MARGIN = 1, FUN = var)
+
+# Order rows of miRNA so that highest variance in expression is on top
+Data <- LinkedData[order(variance,decreasing = T),]
+
+# Log2-normalize data for plotting
+log2.data <- log2(Data)
+
+pheatmap(log2.data[1:20,],
+         cluster_rows = F,
+         cluster_cols = F)
+
+```
+
+#Going through the documentation for ggplot2, generate a plot type that we did not previously discuss in class that describes your data in a new and unique way (5 pts)
+
+```{r}
+Gene_data<- LinkedData[LinkedData$Genes == "CD24", ]
+Gene_data$ferritin.ng.ml.<- na.omit(as.numeric(Gene_data$ferritin.ng.ml.))
+table(Gene_data$ferritin)
+
+g<- ggplot(Gene_data, aes( x = ferritin.ng.ml., y =gene_expression))+
+  geom_hex(bins = 30)+
+  theme_classic()+
+  labs(title =substitute(paste( "The association of ", italic("BPI")," ", "expression with ferritin")), x = "Ferritin", y = "CD24 expression")+
+  theme(text = element_text(size = 11)) + 
+  theme(plot.title = element_text(hjust = .35))
+plot(g)
+```
+
+  
+  
+  
