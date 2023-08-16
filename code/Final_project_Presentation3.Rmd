@@ -39,9 +39,7 @@ Metadata<- droplevels(na.omit(Metadata))
 
   head(GeneExpression_data)
   head(Metadata)
-
 ```
-
 
 ```{r}
 # Rename the first column of GeneExpression_data
@@ -51,6 +49,7 @@ colnames(GeneExpression_data) [1]<- "Genes"
 
   head(GeneExpression_data)
 ```
+
 
 
 ```{r}
@@ -64,7 +63,6 @@ longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
 
 ```
 
-
 ```{r}
 # Link longData with Metadata
 
@@ -77,9 +75,120 @@ LinkedData<- merge(longData, Metadata, by = "participant_id")
   
 ```
 
-# Generate a table of summary statistics for all the covariates you looked at, stratifying by one of your categorical variables. Tables should report n (%) for categorical variables and mean (sd) or median [IQR] for continuous variables. (10 pts).
+# Generate plots incorporating the feedback
+```{r}
+# A data frame name - LinkedData
+# A list of one or more genes
+GeneList = c("CD24")
+
+# A list for one or more continuous covariates
+Con.cov_List = c("age")
+
+# A list of two categorical covariates
+cat.cov_List = c ("sex", "mechanical_ventilation")
+
+# Generating the function
+
+function_pres <- function(data, GeneList, Con.cov_List, cat.cov_List){
+ 
+  # Selecting the gene from genelist
+  
+  gene <- GeneList[[1]]
+
+    # Subset data for the gene
+  Gene_data<- data[data$Gene == gene, ]
+
+  # Now generate a theme
+  MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
+  
+
+# select the continuous covariate
+  con.list <- Con.cov_List[[1]]
+# Convert the continous covariate into numeric form
+  con.cov <- as.numeric(Gene_data[[con.list]])
+
+# Calculating mean, standard deviation for continuous covariate
+
+MeanCon <- round(mean(con.cov, digits = 1, na.rm = T))
+MedianCon<- round(median(con.cov, digits = 1, na.rm = T))
+  
+# Selecting categorical covariate 1 and 2
+  cat.list1 <- cat.cov_List[[1]]
+  cat.list2 <- cat.cov_List[[2]]
+  cat.cov1<- Gene_data[[cat.list1]]
+  cat.cov2<- Gene_data[[cat.list2]]
+
+# Creating histogram
+Histogram<- ggplot( Gene_data) +
+  geom_histogram(aes(gene_expression),bins = 20, color = "gold2", fill = "gold")+
+  labs(x = substitute(paste(italic(gene)," ", "expression")), y  = "Participant number")+
+  MyTheme +
+  theme(text = element_text(size = 10))+
+  geom_vline(aes(xintercept = median(Gene_data$gene_expression))) +
+  theme(plot.title = element_text(hjust = .35))+
+  ggtitle(label =substitute(paste("The Expression Level of"," ", italic(gene)," ", "gene")), subtitle = "Vertical line indicates median value")
+  
+plot(Histogram)
+
+# Generate the scatterplot
+Scatterplot <- ggplot( Gene_data, aes(x = {{con.cov}}, y = gene_expression))+
+  geom_point(color = "red", alpha = .5, size = 3)+
+  MyTheme+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression and"," ", con.list)) ,x = substitute(paste("Age"," ","in yrs", " ", "(", "mean", "=", MeanCon,","," ", "median","=", MedianCon,")")), y = substitute(paste(italic(gene)," ", "expression")))+
+  theme(text = element_text(size = 11)) + 
+  theme(plot.title = element_text(hjust = .35))
+
+plot(Scatterplot)
+
+# Now, generate the boxplot
+
+Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+  geom_boxplot() +
+  MyTheme+
+  scale_fill_manual(values = c("blue3","firebrick"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
+  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression with ", cat.list1," ", "and"," ", "mechanical ventilation")), y = substitute(paste(italic(gene)," ", "Expression")))+
+  scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)"))+
+  theme(text = element_text(size = 10))
+
+#Boxplot<- Box + str_to_title()
+plot(Boxplot)
+}
+
+
+function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
+
+ 
+```
+
+# •	Generate a table of summary statistics for all the covariates you looked at and 2 additional continuous and 1 additional categorical variable (5 pts)
+# Stratifying by one of your categorical variables
+#	Tables should report n (%) for categorical variables 
+#	Tables should report mean (sd) or median [IQR] for continuous variables
+#	Tables should be cleanly formatted in LaTeX with a caption and referenced in the text using the table number as discussed in class.
 
 ```{r}
+# Continous_covariates<- c("age", "ferritin", "procalcitonin","lactate" )
+# categorical_covariates<- c("sex", "mechanical_ventilation","icu-status")
+# Table columns  = age, sex, ferritin, mechanical_ventilation, procalcitonin, icu_status, lactate
+
+CD24_gene<- LinkedData[LinkedData$Genes == "CD24", ]
+
+function_continous<- function(x){
+  con_covariates<- CD24_gene[[con_covariateList]]
+  median<- round(median(con_covariates))
+  IQR<- round(IQR(con_covariates))
+  print(paste("Median (IQR): ", median, "(", IQR, ")"))
+}
+
+function_categorical<- function(x){
+  cat_covariates<- CD24_gene[[cat_covariateList]]
+  percentage <- percent(cat_covariates)
+   print(paste(cat_covariates, " (" , percentage, " ", ")"))
+}
+
+
+
+
 
 
 ```
