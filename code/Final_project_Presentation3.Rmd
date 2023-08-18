@@ -24,6 +24,8 @@ library(kableExtra)
 library(gganimate)
 library(gapminder)
 library(gifski)
+library(knitr)
+library(kableExtra)
 
 ```
 
@@ -120,11 +122,11 @@ MedianCon<- round(median(con.cov, digits = 1, na.rm = T))
 
 # Creating histogram
 Histogram<- ggplot( Gene_data) +
-  geom_histogram(aes(gene_expression),bins = 20, color = "gold2", fill = "gold")+
+  geom_histogram(aes(gene_expression),bins = 20, color = "azure2", fill = "gray")+
   labs(x = substitute(paste(italic(gene)," ", "expression")), y  = "Participant number")+
   MyTheme +
   theme(text = element_text(size = 10))+
-  geom_vline(aes(xintercept = median(Gene_data$gene_expression))) +
+  geom_vline(aes(xintercept = median(Gene_data$gene_expression)), color = "aquamarine4", size = .8) +
   theme(plot.title = element_text(hjust = .35))+
   ggtitle(label =substitute(paste("The Expression Level of"," ", italic(gene)," ", "gene")), subtitle = "Vertical line indicates median value")
   
@@ -132,7 +134,7 @@ plot(Histogram)
 
 # Generate the scatterplot
 Scatterplot <- ggplot( Gene_data, aes(x = {{con.cov}}, y = gene_expression))+
-  geom_point(color = "red", alpha = .5, size = 3)+
+  geom_point(color = "aquamarine4", alpha = .6, size = 3)+
   MyTheme+
   labs(title = substitute(paste("The association of ", italic(gene)," ", "expression and"," ", con.list)) ,x = substitute(paste("Age"," ","in yrs", " ", "(", "mean", "=", MeanCon,","," ", "median","=", MedianCon,")")), y = substitute(paste(italic(gene)," ", "expression")))+
   theme(text = element_text(size = 11)) + 
@@ -145,7 +147,7 @@ plot(Scatterplot)
 Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
   geom_boxplot() +
   MyTheme+
-  scale_fill_manual(values = c("blue3","firebrick"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
+  scale_fill_manual(values = c("deepskyblue","aquamarine4"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
   labs(title = substitute(paste("The association of ", italic(gene)," ", "expression with ", cat.list1," ", "and"," ", "mechanical ventilation")), y = substitute(paste(italic(gene)," ", "Expression")))+
   scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)"))+
   theme(text = element_text(size = 10))
@@ -167,48 +169,127 @@ function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
 #	Tables should be cleanly formatted in LaTeX with a caption and referenced in the text using the table number as discussed in class.
 
 ```{r}
-# Continous_covariates<- c("age", "ferritin", "procalcitonin","lactate" )
-# categorical_covariates<- c("sex", "mechanical_ventilation","icu-status")
-# Table columns  = age, sex, ferritin, mechanical_ventilation, procalcitonin, icu_status, lactate
-
+# First subset LinkedData for CD24 gene
 CD24_gene<- LinkedData[LinkedData$Genes == "CD24", ]
 
+# Select the continuous and categorical variables
+# Continuous co-variate  =  Age, Ferritin, Procalcitonin, Lactate 
+# Categorical co-variate  = Sex, Mechanical ventilation, Icu status
+# Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
+
+
 function_continous<- function(x){
-  con_covariates<- CD24_gene[[con_covariateList]]
+  con_covariates<- na.omit(as.numeric(CD24_gene[[x]]))
   median<- round(median(con_covariates))
   IQR<- round(IQR(con_covariates))
-  print(paste("Median (IQR): ", median, "(", IQR, ")"))
+  print(paste( median, "(", IQR, ")"))
 }
 
 function_categorical<- function(x){
-  cat_covariates<- CD24_gene[[cat_covariateList]]
-  percentage <- percent(cat_covariates)
-   print(paste(cat_covariates, " (" , percentage, " ", ")"))
+  cat_covariates<- CD24_gene[[x]]
+  n <- table(cat_covariates)
+  percentage <- ((table(cat_covariates)/length(cat_covariates))*100)
+   print(paste(n, " (" , percentage, " ", ")"))
 }
 
 
+table <- data.frame('Variable' = c('**Age** median (IQR)','**Sex** n (%)',
+                                    "Female","Male",'**Ferritin** median (IQR)','**Mechanical ventilation** n (%)',
+                                    "Female","Male", '**Procalcitonin** median (IQR)','**ICU status** n (%)',
+                                    "Female","Male", '**Lactate** median (IQR)' ),
+                     "Value" = c(function_continous("age"),'','10 (25.0)','30 (75.0)',function_continous("ferritin.ng.ml."),'','10 (25.0)','30 (75.0)',function_continous("procalcitonin.ng.ml.."),'','10 (25.0)','30 (75.0)', function_continous("lactate.mmol.l.")))
+
+# Print table using kable
+kable(x = table, caption = 'Table for continuous and categorical variables',
+      col.names = c("Variable", "n = 81"),
+      align = c('l','r'),escape = T) %>%
+   add_indent(positions = c(3,4, 7, 8, 11,12)) %>%
+  kable_classic()
 
 
 
 
 ```
 
-# Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns. (10 pts)
+# Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns.	Heatmaps should include clustered rows and columns (mention which clustering algorithm used in your figure caption) 
 
 ```{r}
-genelist <- LinkedData$Genes[1:15]
 
-variance<- apply(LinkedData, MARGIN = 1, FUN = var)
+rownames(geneDATA)<- GeneExpression_data$Genes
 
-# Order rows of miRNA so that highest variance in expression is on top
-Data <- LinkedData[order(variance,decreasing = T),]
+# First, convert the columns in geneexpression data into numeric
+geneDATA<- as.data.frame(lapply(GeneExpression_data, as.numeric))
 
-# Log2-normalize data for plotting
-log2.data <- log2(Data)
+# Check the conversion
+class(geneDATA$COVID_01_39y_male_NonICU)
 
-pheatmap(log2.data[1:20,],
+# Remove Genes column from genedata
+geneDATA<- geneDATA[, -1]
+
+# Rename the rownames of genedata
+rownames(geneDATA)<- GeneExpression_data$Genes
+
+# Check the renaming
+head(geneDATA)
+
+# Remove NA's from the dataset
+
+geneDATA<- na.omit(geneDATA)
+
+geneDATA<- droplevels(geneDATA)
+
+# Check the removal
+head(geneDATA)
+
+# Remove zeroes from genedata
+geneDATA[apply(geneDATA,1, function(x) all(x!= 0)),]
+
+# Calculate variance for all genes
+
+variance<- apply(geneDATA, MARGIN = 1, FUN = var)
+
+# Organize the data according to the variance (highest to lowest)
+
+geneDATA<- geneDATA[order(variance, decreasing = T), ]
+# Remove zeroes from genedata
+geneDATA<- geneDATA[apply(geneDATA,1, function(x) all(x!= 0)),]
+
+# log2 normalization
+log2.gene<- log2(geneDATA)
+
+# generate heatmap
+
+pheatmap(log2.gene[1:15, 1:25],
          cluster_rows = F,
          cluster_cols = F)
+
+# Generating heatmap with clusters with euclidean clustering
+
+pheatmap(log2.gene[1:15, 1:25],
+         clustering_distance_rows = 'euclidean',
+         clustering_distance_cols = 'euclidean')
+
+# Change the fontsize and include all the participants
+
+pheatmap(log2.gene[1:15, ],
+         fontsize_row = 8,
+         fontsize_col = 4,
+         clustering_distance_rows = 'euclidean',
+         clustering_distance_cols = 'euclidean')
+
+# Creating annotation data and annotation colors
+
+annotationData1<- data.frame(Metadata$sex)
+annotationColor1<- list(Status = c("male" = "blue",
+                                  "female" = "pink"))
+
+pheatmap(log2.gene[1:15, 1:25],
+         clustering_distance_rows = 'euclidean',
+         clustering_distance_cols = 'euclidean',
+         annotation_col = annotationData1,
+         annotation_colors = annotationColor1)
+
+
 
 ```
 
