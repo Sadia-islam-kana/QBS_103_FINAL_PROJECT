@@ -279,22 +279,29 @@ i<- c(1:15)
 Heatmap_geneset[ , i] <- apply(Heatmap_geneset[ , i], 2,           
                     function(x) log2(x))
 
-# Remove any rows with inf values (code suggestion from stackoverflow.com. I have customized the code for my dataset
-Heatmap_geneset %>% 
-  rowwise %>% 
-  filter(!any(is.infinite(c_across(where(is.numeric)))))
+# Remove any rows with inf values with NA 
+Heatmap_geneset[sapply(Heatmap_geneset, is.infinite)] <- NA
 
 # Removing NaN from Heatmap_geneset rows
-geneset<- na.omit(Heatmap_geneset)
+Heatmap_geneset<- na.omit(Heatmap_geneset)
 
 # Remove unwanted columns from Heatmap_geneset
-geneset<- geneset[, -(c((16:25), (27:29), (31:39)))]
+Heatmap_geneset<- Heatmap_geneset[, -(c((16:25), (27:29), (31:39)))]
+
+# Changing any zero values to NA
+Heatmap_geneset[Heatmap_geneset == 0]<- NA
+
+# Removing Na from Heatmap_geneset rows
+Heatmap_geneset<- na.omit(Heatmap_geneset)
+
+#Removing duplicate values from heatmap_geneset
+Heatmap_geneset <- Heatmap_geneset[!duplicated(Heatmap_geneset), ]
 
 # Creating annotation data and annotation colors for heatmaps
 
-annotationData <- data.frame(row.names = rownames(geneset),
-                             'Sex' = factor(geneset$sex, labels = c("Female", "Male")),
-                             'Mechanical Ventilation' = factor(geneset$mechanical_ventilation, labels = c("No", "Yes")))
+annotationData <- data.frame(row.names = rownames(Heatmap_geneset),
+                             'Sex' = factor(Heatmap_geneset$sex, labels = c("Female", "Male")),
+                             'Mechanical Ventilation' = factor(Heatmap_geneset$mechanical_ventilation, labels = c("No", "Yes")))
 
 # Define color palette
 annotationColors <- list(Sex = c('Female' = 'royalblue4',
@@ -302,11 +309,9 @@ annotationColors <- list(Sex = c('Female' = 'royalblue4',
                          Mechanical.Ventilation = c("No" = "pink",
                                                    "Yes" = "blue" ) )
 
-##
-geneset<- na.omit(geneset)
 # Generate heatmaps with clustering by euclidean algorithm and tracking bar for sex or mechanical ventilation
 
-pheatmap(geneset[, 1:15],
+pheatmap(Heatmap_geneset[, 1:15],
          fontsize_row = 4,
          fontsize_col = 8,
          clustering_distance_rows = 'euclidean',
