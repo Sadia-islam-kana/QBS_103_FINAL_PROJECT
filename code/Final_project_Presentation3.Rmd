@@ -174,6 +174,20 @@ plot(Boxplot)
 
 # Creating a function for the summary table. Using code suggestions from classwork solution
 
+# Removing unwanted columns from CD24Expression 
+Data<- CD24Expression[, -(c((2:10), (14:15), (17:18), (20:21), (24:25)))]
+
+# Renaming the foillowing columns in Data
+Data<- Data %>% rename("Age" = "age",
+                        "Sex"= "sex",
+                      "Icu Status" =  "icu_status",
+                        "Mechanical Ventilation" = "mechanical_ventilation",
+                       "Ferritin" =  "ferritin.ng.ml.",
+                       "Procalcitonin" = "procalcitonin.ng.ml..",
+                       "Lactate" = "lactate.mmol.l.")
+
+
+
 Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
   
   # Define an empty table
@@ -198,7 +212,7 @@ Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
       value <- paste0(myMedian,' [',myIQR1,', ',myIQR2,']')
       
       # Define new row
-      newRow <- c(paste0('**',var,'** Median [IQR]'),value)
+      newRow <- c(paste0('',var,' median [IQR]'),value)
       
       # Add row to data frame
       table1 <- rbind(table1,newRow)
@@ -209,7 +223,7 @@ Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
     if (var %in% catVars) {
       
       # Define new row for overall variable
-      newRow <- c(paste0('**',var,'** n (%)'),'')
+      newRow <- c(paste0('',var,' n (%)'),'')
       # Add row to data frame
       table1 <- rbind(table1,newRow)
       
@@ -243,7 +257,7 @@ Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
       value <- paste0(myMean,' (',mySD,')')
       
       # Define new row
-      newRow <- c(paste0('**',var,'** Mean (sd)'),value)
+      newRow <- c(paste0('',var,' Mean (sd)'),value)
       
       # Add row to data frame
       table1 <- rbind(table1,newRow)
@@ -262,10 +276,10 @@ Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
     kable_classic()
     
 }
-CD24Expression$lactate.mmol.l.
+
 # Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
 
-Table1(CD24Expression, varList = c("age","sex","ferritin.ng.ml.","mechanical_ventilation","procalcitonin.ng.ml..", "icu_status", "lactate.mmol.l."), nonnormVars = c("age","ferritin.ng.ml.","procalcitonin.ng.ml..", "lactate.mmol.l."), catVars = c("sex", "mechanical_ventilation", "icu_status"))
+Table1(Data, varList = c("Age","Sex","Ferritin","Mechanical Ventilation","Procalcitonin", "Icu Status", "Lactate"), nonnormVars = c("Age","Ferritin","Procalcitonin", "Lactate"), catVars = c("Sex", "Mechanical Ventilation", "Icu Status"))
 
 
 ```
