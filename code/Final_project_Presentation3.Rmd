@@ -95,8 +95,8 @@ Heatmap_geneset<- cbind(Heatmap_geneset, Metadata)
   head(Heatmap_geneset)
   
   
-  # Now clean the data
-  # Remove unknown values from CD24Expression and Heatmap_geneset
+# Now clean the data
+# Remove unknown values from CD24Expression and Heatmap_geneset
    
 CD24Expression<- CD24Expression[apply(CD24Expression, 1, function(x) all(x != "unknown")), ]
 CD24Expression<- droplevels(na.omit(CD24Expression))
@@ -104,16 +104,14 @@ CD24Expression<- droplevels(na.omit(CD24Expression))
 Heatmap_geneset<- Heatmap_geneset[apply(Heatmap_geneset, 1, function(x) all(x != "unknown")), ]
 Heatmap_geneset<- droplevels(na.omit(Heatmap_geneset))
 
-
 ```
+
 
 # Generate plots incorporating the feedback
 ```{r}
 
-# A data frame name - CD24Expression
-
+# The data frame - CD24Expression
 # A continuous covariate is "age"
-
 # Two categorical covariates are "sex",  and "mechanical_ventilation"
 
 
@@ -125,9 +123,8 @@ Heatmap_geneset<- droplevels(na.omit(Heatmap_geneset))
   CD24Expression$age <- as.numeric(CD24Expression[["age"]])
 
 # Calculating mean, standard deviation for continuous covariate
-
-MeanAge <- round(mean(CD24Expression$age, digits = 1, na.rm = T))
-MedianAge<- round(median(CD24Expression$age, digits = 1, na.rm = T))
+MeanAge <- round(mean(CD24Expression$age, na.rm = T))
+MedianAge<- round(median(CD24Expression$age, na.rm = T))
   
 # Creating histogram
 Histogram<- ggplot( CD24Expression) +
@@ -146,7 +143,7 @@ plot(Histogram)
 Scatterplot <- ggplot( CD24Expression, aes(x = age, y = CD24))+
   geom_point(color = "aquamarine4", alpha = .6, size = 3)+
   MyTheme+
-  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression and"," ", "age")) ,x = substitute(paste("Age"," ","in yrs", " ", "(", "mean", "=", "62",","," ", "median","=", "62",")")), y = substitute(paste(italic(CD24)," ", "expression")))+
+  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression and"," ", "age")) ,x = paste("Age in yrs", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = substitute(paste(italic(CD24)," ", "expression")))+
   theme(text = element_text(size = 11)) + 
   theme(plot.title = element_text(hjust = .35))
 
@@ -169,45 +166,171 @@ plot(Boxplot)
 
 ```
 
-# •	Generate a table of summary statistics for all the covariates you looked at and 2 additional continuous and 1 additional categorical variable (5 pts)
+#	Generate a table of summary statistics for all the covariates you looked at and 2 additional continuous and 1 additional categorical variable (5 pts)
 # Stratifying by one of your categorical variables
 #	Tables should report n (%) for categorical variables 
 #	Tables should report mean (sd) or median [IQR] for continuous variables
 #	Tables should be cleanly formatted in LaTeX with a caption and referenced in the text using the table number as discussed in class.
 
+
 ```{r}
 
 # Select the continuous and categorical variables
-# Continuous co-variate  =  Age, Ferritin, Procalcitonin, Lactate 
-# Categorical co-variate  = Sex, Mechanical ventilation, Icu status
+# Continuous co-variates  =  Age, Ferritin, Procalcitonin, Lactate 
+# Categorical co-variates  = Sex, Mechanical ventilation, Icu status
 # Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
 
 
-function_continous<- function(x){
-  con_covariates<- na.omit(as.numeric(CD24Expression[[x]]))
+# Create a function to calculate the mean (sd) or median (IQR) for continuous covariates.
+
+function_continous<- function(x, normal = T){
+  con_covariates<- na.omit(as.numeric(x))
+  
+  if (normal == T){
+  Mean<- round(mean(con_covariates))
+  sd<-  round(sd(con_covariates))
+  print(paste( mean, "(", sd, ")"))
+  }
+  
+  else{
   median<- round(median(con_covariates))
-  IQR<- round(IQR(con_covariates))
-  print(paste( median, "(", IQR, ")"))
-}
+  IQR1<-  round(quantile(con_covariates,1/4),digits = 2)
+  IQR2<- round(quantile(con_covariates, 3/4), digits = 2)
+  print(paste( median, "(", IQR1,",", IQR2, ")"))
+}}
 
+## Now create a function for the categorical covariates
 
-table <- data.frame('Variable' = c('**Age** median (IQR)','**Sex** n (%)',
+function_categorical<- function(x){
+  data<- data.frame("n" = c(table(x)),
+           "perc" = c(round(table(x)/length(x)*100,digits = 2)))
+  print(data)
+  }
+
+function_categorical<- function(x){
+  data.frame("n"= c(table(x)),
+  "perc"= c(round(table(x)/length(x)*100,digits = 2)))
+  #print(paste(n,"(", perc,")" ))#
+  }
+
+function_categorical(CD24Expression$sex)
+
+tabl1<- data
+
+# Now, generate the table
+Table1 <- data.frame("Variable" = c( "**Age** median (IQR)",'**Sex** n (%)',
                                     "Female","Male",'**Ferritin** median (IQR)','**Mechanical ventilation** n (%)',
                                     "Female","Male", '**Procalcitonin** median (IQR)','**ICU status** n (%)',
                                     "Female","Male", '**Lactate** median (IQR)' ),
-                     "Value" = c(function_continous("age"),'','10 (25.0)','30 (75.0)',function_continous("ferritin.ng.ml."),'','10 (25.0)','30 (75.0)',function_continous("procalcitonin.ng.ml.."),'','10 (25.0)','30 (75.0)', function_continous("lactate.mmol.l.")))
+                     "Value" = c(function_continous(CD24Expression$age, normal = F),function_categorical(CD24Expression$sex),function_continous(CD24Expression$ferritin.ng.ml., normal = F),function_categorical(CD24Expression$sex),function_continous(CD24Expression$procalcitonin.ng.ml.., normal = F),function_categorical(CD24Expression$sex), function_continous(CD24Expression$lactate.mmol.l., normal = F)))
 
 # Print table using kable
-kable(x = table, caption = 'Table for continuous and categorical variables',
+kable(x = Table1, caption = 'A Table of summary statistics for continuous and categorical covariates',
       col.names = c("Variable", "n = 81"),
       align = c('l','r'),escape = T) %>%
    add_indent(positions = c(3,4, 7, 8, 11,12)) %>%
   kable_classic()
 
-
-
-
 ```
+
+```{r}
+
+# Creating a function for the summary table. Using code suggestions from classwork solution
+
+Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
+  
+  # Define an empty table
+  table1 <- matrix(nrow = 0,ncol = 2)
+  # Keep track of rows to indent
+  indentRows <- c()
+  
+  # Loop through all variables
+  for (var in varList) {
+    
+    # Define vector of variable values
+    x <- data[,var]
+    
+    # Identify if non-normal
+    if (var %in% nonnormVars) {
+      
+      # Calculate individual values
+      myMedian <- round(median(as.numeric(x), na.rm = T))
+      myIQR1 <- round(quantile(as.numeric(x),1/4, na.rm = T),digits = 2)
+      myIQR2 <- round(quantile(as.numeric(x),3/4, na.rm = T),digits = 2)
+      # Combine values
+      value <- paste0(myMedian,' [',myIQR1,', ',myIQR2,']')
+      
+      # Define new row
+      newRow <- c(paste0('**',var,'** Median [IQR]'),value)
+      
+      # Add row to data frame
+      table1 <- rbind(table1,newRow)
+      
+    }
+    
+    # Identify if categorical
+    if (var %in% catVars) {
+      
+      # Define new row for overall variable
+      newRow <- c(paste0('**',var,'** n (%)'),'')
+      # Add row to data frame
+      table1 <- rbind(table1,newRow)
+      
+      # Loop through levels of variable
+      for (level in levels(as.factor(x))) {
+        # Calculate n and perc
+        n <- sum(x == level)
+        perc <- round(n/(length(x)) * 100,digits = 2)
+        
+        # Combine values
+        value <- paste0(n,' (',perc,')')
+        
+        # Define new row
+        newRow <- c(level,value)
+        # Add row to data frame
+        table1 <- rbind(table1,newRow)
+        # Add index to indented rows
+        indentRows <- c(indentRows,nrow(table1))
+        
+        
+      }
+    }
+    
+    # Otherwise treat as normally distributed
+    if (!(var %in% c(nonnormVars,catVars))) {
+      
+      # Calculate individual values
+      myMean <- round(mean(as.numeric(x), na.rm = T),2)
+      mySD <- round(sd(as.numeric(x), na.rm = 2),2)
+      # Combine values
+      value <- paste0(myMean,' (',mySD,')')
+      
+      # Define new row
+      newRow <- c(paste0('**',var,'** Mean (sd)'),value)
+      
+      # Add row to data frame
+      table1 <- rbind(table1,newRow)
+      
+    }
+  }
+  
+  # Define sample size for heading
+  sampleSize <- paste("n =",nrow(data))
+  
+  # Print formatted table
+  kable(x = table1, caption = 'Table 1',
+        col.names = c("Variable",sampleSize),
+        align = c('l','r'),escape = T,row.names = F) %>%
+    add_indent(positions = indentRows) %>%
+    kable_classic()
+    
+}
+CD24Expression$lactate.mmol.l.
+# Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
+
+Table1(CD24Expression, varList = c("age","sex","ferritin.ng.ml.","mechanical_ventilation","procalcitonin.ng.ml..", "icu_status", "lactate.mmol.l."), nonnormVars = c("age","ferritin.ng.ml.","procalcitonin.ng.ml..", "lactate.mmol.l."), catVars = c("sex", "mechanical_ventilation", "icu_status"))
+```
+
 
 # Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns.	Heatmaps should include clustered rows and columns (mention which clustering algorithm used in your figure caption) 
 
