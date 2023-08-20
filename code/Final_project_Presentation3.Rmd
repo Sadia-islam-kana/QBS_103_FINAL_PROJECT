@@ -33,9 +33,8 @@ library(kableExtra)
 ```{r}
 # Load the gene expression data and metadata
 GeneExpression_data<- read.csv(file = "/Users/Student1/Downloads/QBS103_finalProject_geneExpression.csv")
-Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv", stringsAsFactors = F, na.strings = ("unknown"))
+Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metadata.csv")
 
-Metadata<- droplevels(na.omit(Metadata))
 
 # Loak at both the csv files using head function
 
@@ -44,99 +43,110 @@ Metadata<- droplevels(na.omit(Metadata))
 ```
 
 ```{r}
-# Rename the first column of GeneExpression_data
-colnames(GeneExpression_data) [1]<- "Genes"
+# Rename rownames of GeneExpression_data and Metadata
+rownames(GeneExpression_data) <- GeneExpression_data$X
+rownames(Metadata)<- Metadata$participant_id
 
 # Check the renaming
-
-  head(GeneExpression_data)
+ rownames(GeneExpression_data)
+ rownames(Metadata)
+ 
+ # Remove the x column from gene expression data and participant_id from Metadata
+ GeneExpression_data<- GeneExpression_data[, -1]
+ Metadata<- Metadata[, -1]
+ 
 ```
 
 
 
 ```{r}
-# Convert the gene expression data into long format
-longData<- reshape2::melt(GeneExpression_data, id.vars = ("Genes"),
-                          value.name = "gene_expression", variable.name = "participant_id")
+# Now, subset GeneExpression data for CD24 gene
+CD24Expression<- GeneExpression_data["CD24", ]
 
-# Check the long format conversion
+# Convert row to column in the Geneexpression data and CD24Expression
+geneT_data<- as.data.frame(t(GeneExpression_data))
+CD24Expression<- as.data.frame(t(CD24Expression))
 
-  head(longData)
-
-```
-
-```{r}
-# Link longData with Metadata
-
-LinkedData<- merge(longData, Metadata, by = "participant_id")
-
-# View the linked data
-
-  head(LinkedData)
-  tail(LinkedData)
+# Check the transformed version
+  head(geneT_data)
+  head(CD24Expression)
   
+# Now, calculate the variance for all genes in geneT_data
+variance<- apply(geneT_data, MARGIN = 2, FUN = var)
+
+# Organize the geneT_data according to the variance (highest to lowest)
+geneT_data<- geneT_data[, order(variance, decreasing = T)]
+
+# Now, subset the geneT_Data for first 15 genes
+Heatmap_geneset<- geneT_data[, 1:15]
+
+```
+
+```{r}
+# Link CD24Expression and Heatmap_geneset with Metadata
+
+CD24Expression<-cbind(CD24Expression, Metadata)
+Heatmap_geneset<- cbind(Heatmap_geneset, Metadata)
+
+
+# View theCD24Expression and Hetamap_geneset
+
+  head(CD24Expression)
+  head(Heatmap_geneset)
+  
+  
+  # Now clean the data
+  # Remove unknown values from CD24Expression and Heatmap_geneset
+   
+CD24Expression<- CD24Expression[apply(CD24Expression, 1, function(x) all(x != "unknown")), ]
+CD24Expression<- droplevels(na.omit(CD24Expression))
+  
+Heatmap_geneset<- Heatmap_geneset[apply(Heatmap_geneset, 1, function(x) all(x != "unknown")), ]
+Heatmap_geneset<- droplevels(na.omit(Heatmap_geneset))
+
+
 ```
 
 # Generate plots incorporating the feedback
 ```{r}
-# A data frame name - LinkedData
-# A list of one or more genes
-GeneList = c("CD24")
 
-# A list for one or more continuous covariates
-Con.cov_List = c("age")
+# A data frame name - CD24Expression
 
-# A list of two categorical covariates
-cat.cov_List = c ("sex", "mechanical_ventilation")
+# A continuous covariate is "age"
 
-# Generating the function
+# Two categorical covariates are "sex",  and "mechanical_ventilation"
 
-function_pres <- function(data, GeneList, Con.cov_List, cat.cov_List){
- 
-  # Selecting the gene from genelist
-  
-  gene <- GeneList[[1]]
 
-    # Subset data for the gene
-  Gene_data<- data[data$Gene == gene, ]
-
-  # Now generate a theme
+# Now generate a theme
   MyTheme <- theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(color = "black", linewidth = rel(1)), plot.background = element_rect(fill = "white"), panel.background = element_blank(), legend.key = element_rect(fill = "white"), legend.position = "right")
   
 
-# select the continuous covariate
-  con.list <- Con.cov_List[[1]]
-# Convert the continous covariate into numeric form
-  con.cov <- as.numeric(Gene_data[[con.list]])
+# Select and onvert the continous covariate into numeric form
+  CD24Expression$age <- as.numeric(CD24Expression[["age"]])
 
 # Calculating mean, standard deviation for continuous covariate
 
-MeanCon <- round(mean(con.cov, digits = 1, na.rm = T))
-MedianCon<- round(median(con.cov, digits = 1, na.rm = T))
+MeanAge <- round(mean(CD24Expression$age, digits = 1, na.rm = T))
+MedianAge<- round(median(CD24Expression$age, digits = 1, na.rm = T))
   
-# Selecting categorical covariate 1 and 2
-  cat.list1 <- cat.cov_List[[1]]
-  cat.list2 <- cat.cov_List[[2]]
-  cat.cov1<- Gene_data[[cat.list1]]
-  cat.cov2<- Gene_data[[cat.list2]]
-
 # Creating histogram
-Histogram<- ggplot( Gene_data) +
-  geom_histogram(aes(gene_expression),bins = 20, color = "azure2", fill = "gray")+
-  labs(x = substitute(paste(italic(gene)," ", "expression")), y  = "Participant number")+
+Histogram<- ggplot( CD24Expression) +
+  geom_histogram(aes(CD24),bins = 20, color = "azure2", fill = "aquamarine4")+
+  labs(x = substitute(paste(italic(CD24)," ", "expression")), y  = "Participant number")+
   MyTheme +
   theme(text = element_text(size = 10))+
-  geom_vline(aes(xintercept = median(Gene_data$gene_expression)), color = "aquamarine4", size = .8) +
+  geom_vline(aes(xintercept = median(CD24Expression$CD24)), color = "magenta1", size = .8) +
   theme(plot.title = element_text(hjust = .35))+
-  ggtitle(label =substitute(paste("The Expression Level of"," ", italic(gene)," ", "gene")), subtitle = "Vertical line indicates median value")
+  ggtitle(label =substitute(paste("The Expression Level of"," ", italic(CD24)," ", "gene")), subtitle = "Vertical line indicates median value")+
+  theme(plot.subtitle = element_text(color = "magenta1"))
   
 plot(Histogram)
 
 # Generate the scatterplot
-Scatterplot <- ggplot( Gene_data, aes(x = {{con.cov}}, y = gene_expression))+
+Scatterplot <- ggplot( CD24Expression, aes(x = age, y = CD24))+
   geom_point(color = "aquamarine4", alpha = .6, size = 3)+
   MyTheme+
-  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression and"," ", con.list)) ,x = substitute(paste("Age"," ","in yrs", " ", "(", "mean", "=", MeanCon,","," ", "median","=", MedianCon,")")), y = substitute(paste(italic(gene)," ", "expression")))+
+  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression and"," ", "age")) ,x = substitute(paste("Age"," ","in yrs", " ", "(", "mean", "=", "62",","," ", "median","=", "62",")")), y = substitute(paste(italic(CD24)," ", "expression")))+
   theme(text = element_text(size = 11)) + 
   theme(plot.title = element_text(hjust = .35))
 
@@ -144,22 +154,19 @@ plot(Scatterplot)
 
 # Now, generate the boxplot
 
-Boxplot <- ggplot( Gene_data, aes(x = {{cat.cov1}}, y = gene_expression, fill = {{cat.cov2}}))+
+Boxplot <- ggplot( CD24Expression, aes(x = sex, y = CD24, fill = mechanical_ventilation))+
   geom_boxplot() +
   MyTheme+
   scale_fill_manual(values = c("deepskyblue","aquamarine4"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
-  labs(title = substitute(paste("The association of ", italic(gene)," ", "expression with ", cat.list1," ", "and"," ", "mechanical ventilation")), y = substitute(paste(italic(gene)," ", "Expression")))+
+  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression with sex and mechanical ventilation")), y = substitute(paste(italic(CD24)," ", "Expression")))+
   scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)"))+
   theme(text = element_text(size = 10))
 
+
 #Boxplot<- Box + str_to_title()
 plot(Boxplot)
-}
 
 
-function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
-
- 
 ```
 
 # •	Generate a table of summary statistics for all the covariates you looked at and 2 additional continuous and 1 additional categorical variable (5 pts)
@@ -169,8 +176,6 @@ function_pres(LinkedData,GeneList , Con.cov_List, cat.cov_List)
 #	Tables should be cleanly formatted in LaTeX with a caption and referenced in the text using the table number as discussed in class.
 
 ```{r}
-# First subset LinkedData for CD24 gene
-CD24_gene<- LinkedData[LinkedData$Genes == "CD24", ]
 
 # Select the continuous and categorical variables
 # Continuous co-variate  =  Age, Ferritin, Procalcitonin, Lactate 
@@ -179,17 +184,10 @@ CD24_gene<- LinkedData[LinkedData$Genes == "CD24", ]
 
 
 function_continous<- function(x){
-  con_covariates<- na.omit(as.numeric(CD24_gene[[x]]))
+  con_covariates<- na.omit(as.numeric(CD24Expression[[x]]))
   median<- round(median(con_covariates))
   IQR<- round(IQR(con_covariates))
   print(paste( median, "(", IQR, ")"))
-}
-
-function_categorical<- function(x){
-  cat_covariates<- CD24_gene[[x]]
-  n <- table(cat_covariates)
-  percentage <- ((table(cat_covariates)/length(cat_covariates))*100)
-   print(paste(n, " (" , percentage, " ", ")"))
 }
 
 
@@ -213,97 +211,68 @@ kable(x = table, caption = 'Table for continuous and categorical variables',
 
 # Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns.	Heatmaps should include clustered rows and columns (mention which clustering algorithm used in your figure caption) 
 
+
+
 ```{r}
 
-rownames(geneDATA)<- GeneExpression_data$Genes
+# Now, log2 normalize all gene columns from Heatmap_geneset
+i<- c(1:15)
+Heatmap_geneset[ , i] <- apply(Heatmap_geneset[ , i], 2,           
+                    function(x) log2(x))
 
-# First, convert the columns in geneexpression data into numeric
-geneDATA<- as.data.frame(lapply(GeneExpression_data, as.numeric))
+# Remove any rows with inf values (code suggestion from stackoverflow.com. I have customized the code for my dataset)
+Heatmap_geneset %>% 
+  rowwise %>% 
+  filter(!any(is.infinite(c_across(where(is.numeric)))))
 
-# Check the conversion
-class(geneDATA$COVID_01_39y_male_NonICU)
+# Removing NaN from Heatmap_geneset rows
+Heatmap_geneset<- na.omit(Heatmap_geneset)
 
-# Remove Genes column from genedata
-geneDATA<- geneDATA[, -1]
+# Creating annotation data and annotation colors for heatmaps
 
-# Rename the rownames of genedata
-rownames(geneDATA)<- GeneExpression_data$Genes
+annotationData1<- as.data.frame(Heatmap_geneset$sex)
+rownames(annotationData1)<-rownames(Heatmap_geneset)
+annotationColor1<- list(Status = c("female" = "pink",
+                                  "male" = "blue"))
 
-# Check the renaming
-head(geneDATA)
+annotationData2<- as.data.frame(Heatmap_geneset$mechanical_ventilation)
+rownames(annotationData2)<-rownames(Heatmap_geneset)
+annotationColor2<- list(Status = c("no" = "pink",
+                                  "yes" = "blue"))
 
-# Remove NA's from the dataset
+# Generate heatmaps with clustering by euclidean algorithm and tracking bar for sex or mechanical ventilation
 
-geneDATA<- na.omit(geneDATA)
-
-geneDATA<- droplevels(geneDATA)
-
-# Check the removal
-head(geneDATA)
-
-# Remove zeroes from genedata
-geneDATA[apply(geneDATA,1, function(x) all(x!= 0)),]
-
-# Calculate variance for all genes
-
-variance<- apply(geneDATA, MARGIN = 1, FUN = var)
-
-# Organize the data according to the variance (highest to lowest)
-
-geneDATA<- geneDATA[order(variance, decreasing = T), ]
-# Remove zeroes from genedata
-geneDATA<- geneDATA[apply(geneDATA,1, function(x) all(x!= 0)),]
-
-# log2 normalization
-log2.gene<- log2(geneDATA)
-
-# generate heatmap
-
-pheatmap(log2.gene[1:15, 1:25],
-         cluster_rows = F,
-         cluster_cols = F)
-
-# Generating heatmap with clusters with euclidean clustering
-
-pheatmap(log2.gene[1:15, 1:25],
-         clustering_distance_rows = 'euclidean',
-         clustering_distance_cols = 'euclidean')
-
-# Change the fontsize and include all the participants
-
-pheatmap(log2.gene[1:15, ],
-         fontsize_row = 8,
-         fontsize_col = 4,
-         clustering_distance_rows = 'euclidean',
-         clustering_distance_cols = 'euclidean')
-
-# Creating annotation data and annotation colors
-
-annotationData1<- data.frame(Metadata$sex)
-annotationColor1<- list(Status = c("male" = "blue",
-                                  "female" = "pink"))
-
-pheatmap(log2.gene[1:15, 1:25],
+pheatmap(Heatmap_geneset[, 1:15],
+         fontsize_row = 4,
+         fontsize_col = 8,
          clustering_distance_rows = 'euclidean',
          clustering_distance_cols = 'euclidean',
-         annotation_col = annotationData1,
-         annotation_colors = annotationColor1)
+    annotation_row = annotationData1,
+    annotation_colors = annotationColor1)
 
-
+pheatmap(Heatmap_geneset[, 1:15],
+         fontsize_row = 4,
+         fontsize_col = 8,
+         clustering_distance_rows = 'euclidean',
+         clustering_distance_cols = 'euclidean',
+    annotation_row = annotationData2,
+    annotation_colors = annotationColor2)
 
 ```
+
+
 
 #Going through the documentation for ggplot2, generate a plot type that we did not previously discuss in class that describes your data in a new and unique way (5 pts)
 
 ```{r}
-Gene_data<- LinkedData[LinkedData$Genes == "CD24", ]
-Gene_data$ferritin.ng.ml.<- na.omit(as.numeric(Gene_data$ferritin.ng.ml.))
-table(Gene_data$ferritin)
 
-g<- ggplot(Gene_data, aes( x = ferritin.ng.ml., y =gene_expression))+
+CD24Expression$ferritin.ng.ml.<- na.omit(as.numeric(CD24Expression$ferritin.ng.ml.))
+table(CD24Expression$ferritin)
+
+g<- ggplot(CD24Expression, aes( x = ferritin.ng.ml., y =CD24))+
   geom_hex(bins = 30)+
   theme_classic()+
-  labs(title =substitute(paste( "The association of ", italic("BPI")," ", "expression with ferritin")), x = "Ferritin", y = "CD24 expression")+
+  labs(title =substitute(paste( "The association of ", italic("CD24")," ", "expression with ferritin")), x = "Ferritin", y =substitute(paste(italic("CD24"), " ","expression")))+
   theme(text = element_text(size = 11)) + 
   theme(plot.title = element_text(hjust = .35))
 plot(g)
@@ -312,3 +281,7 @@ plot(g)
   
   
   
+
+
+
+
