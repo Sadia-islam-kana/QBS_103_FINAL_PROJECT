@@ -2,7 +2,10 @@
 title: "Final project presentation 3"
 author: "sadia kana"
 date: "2023-08-14"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ## Final project presentation 3
@@ -166,72 +169,6 @@ plot(Boxplot)
 
 ```
 
-#	Generate a table of summary statistics for all the covariates you looked at and 2 additional continuous and 1 additional categorical variable (5 pts)
-# Stratifying by one of your categorical variables
-#	Tables should report n (%) for categorical variables 
-#	Tables should report mean (sd) or median [IQR] for continuous variables
-#	Tables should be cleanly formatted in LaTeX with a caption and referenced in the text using the table number as discussed in class.
-
-
-```{r}
-
-# Select the continuous and categorical variables
-# Continuous co-variates  =  Age, Ferritin, Procalcitonin, Lactate 
-# Categorical co-variates  = Sex, Mechanical ventilation, Icu status
-# Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
-
-
-# Create a function to calculate the mean (sd) or median (IQR) for continuous covariates.
-
-function_continous<- function(x, normal = T){
-  con_covariates<- na.omit(as.numeric(x))
-  
-  if (normal == T){
-  Mean<- round(mean(con_covariates))
-  sd<-  round(sd(con_covariates))
-  print(paste( mean, "(", sd, ")"))
-  }
-  
-  else{
-  median<- round(median(con_covariates))
-  IQR1<-  round(quantile(con_covariates,1/4),digits = 2)
-  IQR2<- round(quantile(con_covariates, 3/4), digits = 2)
-  print(paste( median, "(", IQR1,",", IQR2, ")"))
-}}
-
-## Now create a function for the categorical covariates
-
-function_categorical<- function(x){
-  data<- data.frame("n" = c(table(x)),
-           "perc" = c(round(table(x)/length(x)*100,digits = 2)))
-  print(data)
-  }
-
-function_categorical<- function(x){
-  data.frame("n"= c(table(x)),
-  "perc"= c(round(table(x)/length(x)*100,digits = 2)))
-  #print(paste(n,"(", perc,")" ))#
-  }
-
-function_categorical(CD24Expression$sex)
-
-tabl1<- data
-
-# Now, generate the table
-Table1 <- data.frame("Variable" = c( "**Age** median (IQR)",'**Sex** n (%)',
-                                    "Female","Male",'**Ferritin** median (IQR)','**Mechanical ventilation** n (%)',
-                                    "Female","Male", '**Procalcitonin** median (IQR)','**ICU status** n (%)',
-                                    "Female","Male", '**Lactate** median (IQR)' ),
-                     "Value" = c(function_continous(CD24Expression$age, normal = F),function_categorical(CD24Expression$sex),function_continous(CD24Expression$ferritin.ng.ml., normal = F),function_categorical(CD24Expression$sex),function_continous(CD24Expression$procalcitonin.ng.ml.., normal = F),function_categorical(CD24Expression$sex), function_continous(CD24Expression$lactate.mmol.l., normal = F)))
-
-# Print table using kable
-kable(x = Table1, caption = 'A Table of summary statistics for continuous and categorical covariates',
-      col.names = c("Variable", "n = 81"),
-      align = c('l','r'),escape = T) %>%
-   add_indent(positions = c(3,4, 7, 8, 11,12)) %>%
-  kable_classic()
-
-```
 
 ```{r}
 
@@ -329,10 +266,9 @@ CD24Expression$lactate.mmol.l.
 # Table rows  = Age,Sex, Ferritin, Mechanical ventilation, Procalcitonin, Icu status, Lactate 
 
 Table1(CD24Expression, varList = c("age","sex","ferritin.ng.ml.","mechanical_ventilation","procalcitonin.ng.ml..", "icu_status", "lactate.mmol.l."), nonnormVars = c("age","ferritin.ng.ml.","procalcitonin.ng.ml..", "lactate.mmol.l."), catVars = c("sex", "mechanical_ventilation", "icu_status"))
+
+
 ```
-
-
-# Generate a heatmap of at least 10 genes with tracking bars for your two selected categorical covariates. Heatmaps should include clustered rows and columns.	Heatmaps should include clustered rows and columns (mention which clustering algorithm used in your figure caption) 
 
 
 
@@ -343,62 +279,65 @@ i<- c(1:15)
 Heatmap_geneset[ , i] <- apply(Heatmap_geneset[ , i], 2,           
                     function(x) log2(x))
 
-# Remove any rows with inf values (code suggestion from stackoverflow.com. I have customized the code for my dataset)
+# Remove any rows with inf values (code suggestion from stackoverflow.com. I have customized the code for my dataset
 Heatmap_geneset %>% 
   rowwise %>% 
   filter(!any(is.infinite(c_across(where(is.numeric)))))
 
 # Removing NaN from Heatmap_geneset rows
-Heatmap_geneset<- na.omit(Heatmap_geneset)
+geneset<- na.omit(Heatmap_geneset)
+
+# Remove unwanted columns from Heatmap_geneset
+geneset<- geneset[, -(c((16:25), (27:29), (31:39)))]
 
 # Creating annotation data and annotation colors for heatmaps
 
-annotationData1<- as.data.frame(Heatmap_geneset$sex)
-rownames(annotationData1)<-rownames(Heatmap_geneset)
-annotationColor1<- list(Status = c("female" = "pink",
-                                  "male" = "blue"))
+annotationData <- data.frame(row.names = rownames(geneset),
+                             'Sex' = factor(geneset$sex, labels = c("Female", "Male")),
+                             'Mechanical Ventilation' = factor(geneset$mechanical_ventilation, labels = c("No", "Yes")))
 
-annotationData2<- as.data.frame(Heatmap_geneset$mechanical_ventilation)
-rownames(annotationData2)<-rownames(Heatmap_geneset)
-annotationColor2<- list(Status = c("no" = "pink",
-                                  "yes" = "blue"))
+# Define color palette
+annotationColors <- list(Sex = c('Female' = 'royalblue4',
+                                 'Male' = 'magenta4'),
+                         Mechanical.Ventilation = c("No" = "pink",
+                                                   "Yes" = "blue" ) )
 
+##
+geneset<- na.omit(geneset)
 # Generate heatmaps with clustering by euclidean algorithm and tracking bar for sex or mechanical ventilation
 
-pheatmap(Heatmap_geneset[, 1:15],
+pheatmap(geneset[, 1:15],
          fontsize_row = 4,
          fontsize_col = 8,
          clustering_distance_rows = 'euclidean',
          clustering_distance_cols = 'euclidean',
-    annotation_row = annotationData1,
-    annotation_colors = annotationColor1)
+    annotation_row = annotationData,
+    annotation_colors =annotationColors,
+    main = "Gene expression clustered by euclidean algorithm")
 
-pheatmap(Heatmap_geneset[, 1:15],
-         fontsize_row = 4,
-         fontsize_col = 8,
-         clustering_distance_rows = 'euclidean',
-         clustering_distance_cols = 'euclidean',
-    annotation_row = annotationData2,
-    annotation_colors = annotationColor2)
 
 ```
 
 
 
-#Going through the documentation for ggplot2, generate a plot type that we did not previously discuss in class that describes your data in a new and unique way (5 pts)
+#Going through the documentation for ggplot2, generate a plot type that we did not previously discuss in class that describes your data in a new and unique way
 
 ```{r}
 
+# Convert ferritin into numeric form
 CD24Expression$ferritin.ng.ml.<- na.omit(as.numeric(CD24Expression$ferritin.ng.ml.))
-table(CD24Expression$ferritin)
+
+# Create geom_hexagon plot using ggplot2
 
 g<- ggplot(CD24Expression, aes( x = ferritin.ng.ml., y =CD24))+
-  geom_hex(bins = 30)+
+  geom_hex(bins = 30, colour = "white")+
   theme_classic()+
   labs(title =substitute(paste( "The association of ", italic("CD24")," ", "expression with ferritin")), x = "Ferritin", y =substitute(paste(italic("CD24"), " ","expression")))+
   theme(text = element_text(size = 11)) + 
   theme(plot.title = element_text(hjust = .35))
+
 plot(g)
+
 ```
 
   
