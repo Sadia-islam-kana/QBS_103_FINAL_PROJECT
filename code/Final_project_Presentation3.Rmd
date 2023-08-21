@@ -1,7 +1,7 @@
 ---
 title: "Final project presentation 3"
-author: "sadia kana"
-date: "2023-08-14"
+author: "Sadia Kana"
+date: "2023-08-22"
 output:
   pdf_document: default
   html_document:
@@ -29,6 +29,7 @@ library(gapminder)
 library(gifski)
 library(knitr)
 library(kableExtra)
+library(latex2exp)
 
 ```
 
@@ -41,8 +42,8 @@ Metadata<- read.csv(file =  "/Users/Student1/Downloads/QBS103_finalProject_metad
 
 # Loak at both the csv files using head function
 
-  head(GeneExpression_data)
-  head(Metadata)
+  # head(GeneExpression_data)
+  # head(Metadata)
 ```
 
 ```{r}
@@ -51,10 +52,10 @@ rownames(GeneExpression_data) <- GeneExpression_data$X
 rownames(Metadata)<- Metadata$participant_id
 
 # Check the renaming
- rownames(GeneExpression_data)
- rownames(Metadata)
+ # rownames(GeneExpression_data)
+ # rownames(Metadata)
  
- # Remove the x column from gene expression data and participant_id from Metadata
+ # Remove the X column from gene expression data and participant_id from Metadata
  GeneExpression_data<- GeneExpression_data[, -1]
  Metadata<- Metadata[, -1]
  
@@ -63,16 +64,16 @@ rownames(Metadata)<- Metadata$participant_id
 
 
 ```{r}
-# Now, subset GeneExpression data for CD24 gene
+# Now, subset GeneExpression_data for CD24 gene
 CD24Expression<- GeneExpression_data["CD24", ]
 
-# Convert row to column in the Geneexpression data and CD24Expression
+# Convert row to column in the Geneexpression_data and CD24Expression
 geneT_data<- as.data.frame(t(GeneExpression_data))
 CD24Expression<- as.data.frame(t(CD24Expression))
 
 # Check the transformed version
-  head(geneT_data)
-  head(CD24Expression)
+  # head(geneT_data)
+  # head(CD24Expression)
   
 # Now, calculate the variance for all genes in geneT_data
 variance<- apply(geneT_data, MARGIN = 2, FUN = var)
@@ -94,8 +95,8 @@ Heatmap_geneset<- cbind(Heatmap_geneset, Metadata)
 
 # View theCD24Expression and Hetamap_geneset
 
-  head(CD24Expression)
-  head(Heatmap_geneset)
+  # head(CD24Expression)
+  # head(Heatmap_geneset)
   
   
 # Now clean the data
@@ -125,7 +126,7 @@ Heatmap_geneset<- droplevels(na.omit(Heatmap_geneset))
 # Select and onvert the continous covariate into numeric form
   CD24Expression$age <- as.numeric(CD24Expression[["age"]])
 
-# Calculating mean, standard deviation for continuous covariate
+# Calculating mean, standard deviation for the continuous covariate
 MeanAge <- round(mean(CD24Expression$age, na.rm = T))
 MedianAge<- round(median(CD24Expression$age, na.rm = T))
   
@@ -137,7 +138,7 @@ Histogram<- ggplot( CD24Expression) +
   theme(text = element_text(size = 10))+
   geom_vline(aes(xintercept = median(CD24Expression$CD24)), color = "magenta1", size = .8) +
   theme(plot.title = element_text(hjust = .35))+
-  ggtitle(label =substitute(paste("The Expression Level of"," ", italic(CD24)," ", "gene")), subtitle = "Vertical line indicates median value")+
+  ggtitle(label =substitute(paste("The Expression Level of"," ", italic(CD24)," ", "Gene")), subtitle = "Vertical line indicates median value")+
   theme(plot.subtitle = element_text(color = "magenta1"))
   
 plot(Histogram)
@@ -146,7 +147,7 @@ plot(Histogram)
 Scatterplot <- ggplot( CD24Expression, aes(x = age, y = CD24))+
   geom_point(color = "aquamarine4", alpha = .6, size = 3)+
   MyTheme+
-  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression and"," ", "age")) ,x = paste("Age in yrs", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = substitute(paste(italic(CD24)," ", "expression")))+
+  labs(title = substitute(paste("The Association of ", italic(CD24)," ", "Expression and"," ", "Age")) ,x = paste("Age in yrs", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = substitute(paste(italic(CD24)," ", "expression")))+
   theme(text = element_text(size = 11)) + 
   theme(plot.title = element_text(hjust = .35))
 
@@ -157,8 +158,8 @@ plot(Scatterplot)
 Boxplot <- ggplot( CD24Expression, aes(x = sex, y = CD24, fill = mechanical_ventilation))+
   geom_boxplot() +
   MyTheme+
-  scale_fill_manual(values = c("deepskyblue","aquamarine4"),name = "Mechanical ventilation", labels = c("No(75)", "Yes(51)"))+
-  labs(title = substitute(paste("The association of ", italic(CD24)," ", "expression with sex and mechanical ventilation")), y = substitute(paste(italic(CD24)," ", "Expression")))+
+  scale_fill_manual(values = c("deepskyblue","aquamarine4"),name = "Mechanical Ventilation", labels = c("No(75)", "Yes(51)"))+
+  labs(title = substitute(paste("The Association of ", italic(CD24)," ", "Expression with Sex and Mechanical Ventilation")), y = substitute(paste(italic(CD24)," ", "Expression")))+
   scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)"))+
   theme(text = element_text(size = 10))
 
@@ -187,6 +188,7 @@ Data<- Data %>% rename("Age" = "age",
                        "Lactate" = "lactate.mmol.l.")
 
 
+# Now, creating the function for table
 
 Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
   
@@ -269,7 +271,7 @@ Table1 <- function(data,varList,nonnormVars = '',catVars = '') {
   sampleSize <- paste("n =",nrow(data))
   
   # Print formatted table
-  kable(x = table1, caption = 'Table 1',
+  kable(x = table1, caption = 'Summary Statistics for Continuous and Categorical Covariates',
         col.names = c("Variable",sampleSize),
         align = c('l','r'),escape = T,row.names = F) %>%
     add_indent(positions = indentRows) %>%
@@ -288,7 +290,8 @@ Table1(Data, varList = c("Age","Sex","Ferritin","Mechanical Ventilation","Procal
 
 ```{r}
 
-# Now, log2 normalize all gene columns from Heatmap_geneset
+# Use Heatmap_geneset to create a heatmap.
+# First, log2 normalize all gene columns from Heatmap_geneset
 i<- c(1:15)
 Heatmap_geneset[ , i] <- apply(Heatmap_geneset[ , i], 2,           
                     function(x) log2(x))
@@ -332,8 +335,7 @@ pheatmap(Heatmap_geneset[, 1:15],
          clustering_distance_cols = 'euclidean',
     annotation_row = annotationData,
     annotation_colors =annotationColors,
-    main = "Gene expression clustered by euclidean algorithm")
-
+    main = "Expression Clustered by Euclidean Algorithm")
 
 ```
 
@@ -342,8 +344,9 @@ pheatmap(Heatmap_geneset[, 1:15],
 #Going through the documentation for ggplot2, generate a plot type that we did not previously discuss in class that describes your data in a new and unique way
 
 ```{r}
+# For the new plot, I have decided to plot a hexagon plot type showing association of ferritin and CD24 expression.
 
-# Convert ferritin into numeric form
+# First, convert ferritin into numeric form
 CD24Expression$ferritin.ng.ml.<- na.omit(as.numeric(CD24Expression$ferritin.ng.ml.))
 
 # Create geom_hexagon plot using ggplot2
@@ -351,9 +354,11 @@ CD24Expression$ferritin.ng.ml.<- na.omit(as.numeric(CD24Expression$ferritin.ng.m
 g<- ggplot(CD24Expression, aes( x = ferritin.ng.ml., y =CD24))+
   geom_hex(bins = 30, colour = "white")+
   theme_classic()+
-  labs(title =substitute(paste( "The association of ", italic("CD24")," ", "expression with ferritin")), x = "Ferritin", y =substitute(paste(italic("CD24"), " ","expression")))+
+  labs(title =substitute(paste( "The Association of ", italic("CD24")," ", "Expression with Ferritin")), x = "Ferritin", y =substitute(paste(italic("CD24"), " ","expression")))+
   theme(text = element_text(size = 11)) + 
-  theme(plot.title = element_text(hjust = .35))
+  theme(plot.title = element_text(hjust = .35))+
+  guides(fill=guide_legend(title="Number of Patients"))+
+  scale_fill_viridis_c()
 
 plot(g)
 
