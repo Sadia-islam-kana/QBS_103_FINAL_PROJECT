@@ -145,7 +145,7 @@ plot(Histogram)
 
 # Generate the scatterplot
 Scatterplot <- ggplot( CD24Expression, aes(x = age, y = CD24))+
-  geom_point(color = "aquamarine4", alpha = .6, size = 3)+
+  geom_point(color = "magenta1", alpha = .6, size = 3.5)+
   MyTheme+
   labs(title = substitute(paste("The Association of ", italic(CD24)," ", "Expression and"," ", "Age")) ,x = paste("Age in yrs", "(", "mean", "=", MeanAge,",", "median","=", MedianAge,")"), y = substitute(paste(italic(CD24)," ", "expression")))+
   theme(text = element_text(size = 11)) + 
@@ -163,8 +163,6 @@ Boxplot <- ggplot( CD24Expression, aes(x = sex, y = CD24, fill = mechanical_vent
   scale_x_discrete(name = "Sex", labels =c( "Female(51)", "Male(74)"))+
   theme(text = element_text(size = 10))
 
-
-#Boxplot<- Box + str_to_title()
 plot(Boxplot)
 
 
